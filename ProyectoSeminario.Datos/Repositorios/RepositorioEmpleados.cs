@@ -9,7 +9,7 @@ namespace ProyectoSeminario.Datos.Repositorios
 {
     public class RepositorioEmpleados : IRepositorioEmpleados
     {
-        public void Agregar(Empleados empleado, SqlConnection conn, SqlTransaction? tran = null)
+        public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
             var insertQuery = @"INSERT INTO Empleados (Nombre, Activo) VALUES 
                         (@Nombre, @Activo); 
@@ -31,7 +31,7 @@ namespace ProyectoSeminario.Datos.Repositorios
         }
 
 
-        public void Editar(Empleados empleadoEditado, SqlConnection conn, SqlTransaction? tran = null)
+        public void Editar(Empleado empleadoEditado, SqlConnection conn, SqlTransaction? tran = null)
         {
             string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre 
                                     WHERE EmpleadoId=@EmpleadoId";
@@ -43,7 +43,7 @@ namespace ProyectoSeminario.Datos.Repositorios
             }
         }
 
-        public bool Existe(Empleados empleado, SqlConnection conn, SqlTransaction? tran = null)
+        public bool Existe(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
             var selectQuery = "SELECT COUNT(*) FROM Empleados WHERE Nombre = @Nombre";
             if (empleado.EmpleadoId != 0)
@@ -65,12 +65,12 @@ namespace ProyectoSeminario.Datos.Repositorios
             return query.Count;
         }
 
-        public Empleados? GetEmpleadoPorId(int empleadoId, SqlConnection conn)
+        public Empleado? GetEmpleadoPorId(int empleadoId, SqlConnection conn)
         {
             string selectQuery = @"SELECT EmpleadoId, Nombre, Apellido, Activo 
                 FROM Empleados 
                 WHERE EmpleadoId=@EmpleadoId";
-            var empleado = conn.QuerySingleOrDefault<Empleados>(selectQuery, new { @EmpleadoId = empleadoId });
+            var empleado = conn.QuerySingleOrDefault<Empleado>(selectQuery, new { @EmpleadoId = empleadoId });
 
             // Si el cliente no existe, retornamos null
             if (empleado == null)
@@ -98,5 +98,51 @@ namespace ProyectoSeminario.Datos.Repositorios
 
             return lista.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
         }
+        public void Desactivar(int empleadoId, SqlConnection conn)
+        {
+            try
+            {
+                var updateQuery = @"UPDATE Empleados SET 
+                        Activa = 0 WHERE empleadoId = @EmpleadoId";
+
+                int registrosAfectados = conn.Execute(updateQuery, new
+                {
+                    @CategoriaId = empleadoId,
+                });
+
+                if (registrosAfectados == 0)
+                {
+                    throw new Exception("No se pudo desactivar");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo desactivar, la categoría contiene productos.", ex);
+            }
+        }
+
+        public void Activar(int empleadoId, SqlConnection conn)
+        {
+            try
+            {
+                var updateQuery = @"UPDATE Empleados SET 
+                        Activo = 1 WHERE empleadoId = @EmpleadoId";
+
+                int registrosAfectados = conn.Execute(updateQuery, new
+                {
+                    @CategoriaId = empleadoId,
+                });
+
+                if (registrosAfectados == 0)
+                {
+                    throw new Exception("No se pudo activar");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo activar", ex);
+            }
+        }
+
     }
 }

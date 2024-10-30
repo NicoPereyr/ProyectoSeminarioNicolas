@@ -1,4 +1,5 @@
 ﻿using ProyectoSeminario.Datos.Interfaces;
+using ProyectoSeminario.Datos.Repositorios;
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
@@ -58,5 +59,7 @@ namespace ProyectoSeminario.Servicios.Servicios
         {
             throw new NotImplementedException();
         }
+        
+
     }
 }

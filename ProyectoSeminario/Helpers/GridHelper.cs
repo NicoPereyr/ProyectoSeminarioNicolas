@@ -1,10 +1,5 @@
 ﻿using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProyectoSeminario.Windows.Helpers
 {
@@ -45,6 +40,13 @@ namespace ProyectoSeminario.Windows.Helpers
                     r.Cells[0].Value = categoria.NombreCategoria;
                     r.Cells[1].Value = categoria.Activa.ToString();
                     break;
+                case EmpleadoListDto empleado:
+                    r.Cells[0].Value = empleado.Nombre;
+                    r.Cells[1].Value = empleado.Apellido;
+                    r.Cells[2].Value = empleado.Documento;
+                    r.Cells[3].Value = empleado.PorcentajeComision;
+                    break;
+
             }
             r.Tag = obj;
         }

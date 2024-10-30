@@ -40,6 +40,7 @@
             barraTitulo = new Panel();
             panelContenedorPrincipal = new Panel();
             panelFormHijo = new Panel();
+            btnEmpleados = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)btnMinimizar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)btnRestaurar).BeginInit();
@@ -126,12 +127,13 @@
             panel1.Controls.Add(btnRestaurar);
             panel1.Controls.Add(btnCerrar);
             panel1.Controls.Add(btnMaximizar);
+            panel1.Controls.Add(btnEmpleados);
             panel1.Controls.Add(btnCategorias);
             panel1.Controls.Add(btnProductos);
             panel1.Controls.Add(btnOrdenes);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(136, 600);
+            panel1.Size = new Size(136, 627);
             panel1.TabIndex = 1;
             // 
             // btnMinimizar
@@ -140,7 +142,7 @@
             btnMinimizar.BackColor = Color.DarkSlateGray;
             btnMinimizar.Cursor = Cursors.Hand;
             btnMinimizar.Image = Properties.Resources.minimizar;
-            btnMinimizar.Location = new Point(40, 538);
+            btnMinimizar.Location = new Point(33, 598);
             btnMinimizar.Name = "btnMinimizar";
             btnMinimizar.Size = new Size(25, 25);
             btnMinimizar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -154,7 +156,7 @@
             btnRestaurar.BackColor = Color.DarkSlateGray;
             btnRestaurar.Cursor = Cursors.Hand;
             btnRestaurar.Image = Properties.Resources.restaurar;
-            btnRestaurar.Location = new Point(40, 495);
+            btnRestaurar.Location = new Point(33, 555);
             btnRestaurar.Name = "btnRestaurar";
             btnRestaurar.Size = new Size(25, 25);
             btnRestaurar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -168,7 +170,7 @@
             btnCerrar.BackColor = Color.DarkSlateGray;
             btnCerrar.Cursor = Cursors.Hand;
             btnCerrar.Image = Properties.Resources.Close;
-            btnCerrar.Location = new Point(85, 538);
+            btnCerrar.Location = new Point(78, 598);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(25, 25);
             btnCerrar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -181,7 +183,7 @@
             btnMaximizar.BackColor = Color.DarkSlateGray;
             btnMaximizar.Cursor = Cursors.Hand;
             btnMaximizar.Image = Properties.Resources.maximizar;
-            btnMaximizar.Location = new Point(85, 495);
+            btnMaximizar.Location = new Point(78, 555);
             btnMaximizar.Name = "btnMaximizar";
             btnMaximizar.Size = new Size(25, 25);
             btnMaximizar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -216,9 +218,26 @@
             panelFormHijo.AutoSize = true;
             panelFormHijo.Location = new Point(134, 28);
             panelFormHijo.Name = "panelFormHijo";
-            panelFormHijo.Size = new Size(866, 572);
+            panelFormHijo.Size = new Size(866, 599);
             panelFormHijo.TabIndex = 3;
             panelFormHijo.Visible = false;
+            // 
+            // btnEmpleados
+            // 
+            btnEmpleados.Cursor = Cursors.Hand;
+            btnEmpleados.FlatAppearance.BorderSize = 0;
+            btnEmpleados.FlatStyle = FlatStyle.Flat;
+            btnEmpleados.Font = new Font("Comic Sans MS", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEmpleados.Image = Properties.Resources.comidas;
+            btnEmpleados.ImageAlign = ContentAlignment.BottomCenter;
+            btnEmpleados.Location = new Point(0, 433);
+            btnEmpleados.Name = "btnEmpleados";
+            btnEmpleados.Size = new Size(136, 90);
+            btnEmpleados.TabIndex = 0;
+            btnEmpleados.Text = "Empleados";
+            btnEmpleados.TextAlign = ContentAlignment.BottomCenter;
+            btnEmpleados.UseVisualStyleBackColor = true;
+            btnEmpleados.Click += btnEmpleados_Click;
             // 
             // frmMenuPrincipal
             // 
@@ -227,7 +246,7 @@
             BackColor = Color.Gainsboro;
             BackgroundImage = Properties.Resources.logopan;
             BackgroundImageLayout = ImageLayout.Center;
-            ClientSize = new Size(1000, 600);
+            ClientSize = new Size(1000, 627);
             Controls.Add(panelFormHijo);
             Controls.Add(barraTitulo);
             Controls.Add(panel1);
@@ -261,5 +280,6 @@
         private PictureBox btnMinimizar;
         private Panel panelContenedorPrincipal;
         private Panel panelFormHijo;
+        private Button btnEmpleados;
     }
 }

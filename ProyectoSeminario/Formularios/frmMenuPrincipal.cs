@@ -142,5 +142,15 @@ namespace ProyectoSeminario.Windows.Formularios
         {
 
         }
+
+        private void btnEmpleados_Click(object sender, EventArgs e)
+        {
+            {
+                frmEmpleados frm = new frmEmpleados(_serviceProvider);
+                AbrirFormularioEnPanel(frm);
+                panelFormHijo.Visible = true;
+            }
+
+        }
     }
 }

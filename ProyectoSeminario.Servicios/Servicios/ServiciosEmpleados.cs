@@ -1,4 +1,5 @@
 ﻿using ProyectoSeminario.Datos.Interfaces;
+using ProyectoSeminario.Datos.Repositorios;
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
@@ -19,13 +20,32 @@ namespace ProyectoSeminario.Servicios.Servicios
             _repositorioEmpleados = repositorioEmpleados;
             _cadena = cadena;
         }
+        public void Desactivar(int empleadoId)
+        {
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                _repositorioEmpleados!.Desactivar(empleadoId, conn);
+
+            }
+        }
+
+        public void Activar(int empleadoId)
+        {
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                _repositorioEmpleados!.Activar(empleadoId, conn);
+
+            }
+        }
 
         public void Borrar(int empleadoId)
         {
             throw new NotImplementedException();
         }
 
-        public bool Existe(Empleados empleado)
+        public bool Existe(Empleado empleado)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +59,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public Empleados? GetEmpleadoPorId(int empleadoId)
+        public Empleado? GetEmpleadoPorId(int empleadoId)
         {
             using (var conn = new SqlConnection(_cadena))
             {
@@ -58,9 +78,37 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public void Guardar(Empleados empleado)
+        public void Guardar(Empleado empleado)
         {
             throw new NotImplementedException();
+        }
+        public void Editar(Empleado empleadoEditado)
+        {
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                using (var tran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        if (empleadoEditado.EmpleadoId == 0)
+                        {
+                            _repositorioEmpleados!.Agregar(empleadoEditado, conn, tran);
+                        }
+                        else
+                        {
+                            _repositorioEmpleados!.Editar(empleadoEditado, conn, tran);
+                        }
+                        tran.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
+
         }
     }
 }

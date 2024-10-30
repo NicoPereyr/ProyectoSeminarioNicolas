@@ -139,48 +139,48 @@ namespace ProyectoSeminario.Windows.Formularios
             LoadData(filter);
         }
 
-        private void tsbAgregar_Click(object sender, EventArgs e)
-        {
-            frmCategoriasAE frm = new frmCategoriasAE(_serviceProvider);
-            DialogResult dr = frm.ShowDialog(this);
-            if (dr == DialogResult.Cancel) return;
-            try
-            {
-                Categoria? categoria = frm.GetCategoria();
-                if (categoria is null) return;
-                if (!_servicio!.Existe(categoria))
-                {
-                    _servicio.Guardar(categoria);
+        //private void tsbAgregar_Click(object sender, EventArgs e)
+        //{
+        //    frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider);
+        //    DialogResult dr = frm.ShowDialog(this);
+        //    if (dr == DialogResult.Cancel) return;
+        //    try
+        //    {
+        //        Empleado? empleado = frm.GetEmpleado();
+        //        if (empleado is null) return;
+        //        if (!_servicio!.Existe(empleado))
+        //        {
+        //            _servicio.Guardar(empleado);
 
 
-                    totalRecords = _servicio?.GetCantidad() ?? 0;
-                    totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
-                    //Preguntar a Carlos sobre línea 159
-                    currentPage = 1;
-                    LoadData();
+        //            totalRecords = _servicio?.GetCantidad() ?? 0;
+        //            totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+        //            //Preguntar a Carlos sobre línea 159
+        //            currentPage = 1;
+        //            LoadData();
 
-                    MessageBox.Show("Registro agregado",
-                        "Mensaje",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Registro existente\nAlta denegada",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,
-                "Error",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+        //            MessageBox.Show("Registro agregado",
+        //                "Mensaje",
+        //                MessageBoxButtons.OK,
+        //                MessageBoxIcon.Information);
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Registro existente\nAlta denegada",
+        //            "Error",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message,
+        //        "Error",
+        //        MessageBoxButtons.OK,
+        //        MessageBoxIcon.Error);
 
-            }
-        }
+        //    }
+        //}
 
         private void tsbFiltrar_Click(object sender, EventArgs e)
         {
@@ -198,11 +198,11 @@ namespace ProyectoSeminario.Windows.Formularios
                 var r = dgvDatos.SelectedRows[0];
                 if (r.Tag != null)
                 {
-                    var categoriaDto = (CategoriaListDto)r.Tag;
+                    var empleadoDto = (EmpleadoListDto)r.Tag;
 
                     // Crea el formulario para editar la categoría
-                    frmCategoriasAE frm = new frmCategoriasAE(_serviceProvider) { Text = "Editar categoria" };
-                    frm.SetCategoriaDto(categoriaDto); // Pasa el DTO al formulario
+                    frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider) { Text = "Editar empleado" };
+                    frm.SetEmpleadoDto(empleadoDto); // Pasa el DTO al formulario
                     DialogResult dr = frm.ShowDialog(this);
 
                     if (dr == DialogResult.Cancel)
@@ -211,27 +211,27 @@ namespace ProyectoSeminario.Windows.Formularios
                     }
 
                     // Recupera el objeto actualizado desde el formulario
-                    var categoriaEditada = frm.GetCategoria(); // Obtenemos el objeto Categoria
+                    var empleadoEditado = frm.GetEmpleado(); // Obtenemos el objeto Categoria
 
-                    if (categoriaEditada == null)
+                    if (empleadoEditado == null)
                     {
-                        throw new Exception("Error al recuperar la categoría editada.");
+                        throw new Exception("Error al recuperar el empleado editado.");
                     }
 
                     // Mapear los cambios de la entidad 'Categoria' al DTO 'CategoriaListDto'
-                    categoriaDto.NombreCategoria = categoriaEditada.NombreCategoria;
+                    empleadoDto.Nombre = empleadoEditado.Nombre;
                     // Aquí puedes mapear cualquier otro campo que necesites mostrar en la grilla
 
                     // Verifica si la categoría ya existe (probablemente por el nombre o algún otro criterio)
-                    if (!_servicio!.Existe(categoriaEditada))
+                    if (!_servicio!.Existe(empleadoEditado))
                     {
                         // Si no existe, guarda los cambios en la base de datos
-                        _servicio.Editar(categoriaEditada);
+                        _servicio.Editar(empleadoEditado);
 
                         // Actualiza la fila del DataGridView con el DTO actualizado
-                        GridHelper.SetearFila(r, categoriaDto); // Usa el DTO para mostrar en la grilla
+                        GridHelper.SetearFila(r, empleadoDto); // Usa el DTO para mostrar en la grilla
 
-                        MessageBox.Show("Categoría editada",
+                        MessageBox.Show("Empleado editada",
                             "Mensaje",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
@@ -248,7 +248,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al editar la categoría: {ex.Message}",
+                MessageBox.Show($"Error al editar el empleado: {ex.Message}",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -264,11 +264,11 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var categoria = (CategoriaListDto)r.Tag;
+            var empleado = (EmpleadoListDto)r.Tag;
 
             try
             {
-                DialogResult dr = MessageBox.Show($@"¿Desea desactivar la categoría {categoria.NombreCategoria}?",
+                DialogResult dr = MessageBox.Show($@"¿Desea desactivar el empleado {empleado.Nombre}?",
                         "Confirmar desactivación",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
@@ -276,24 +276,6 @@ namespace ProyectoSeminario.Windows.Formularios
                 if (dr == DialogResult.No)
                 {
                     return;
-                }
-                if (!_servicio!.EstaRelacionada(categoria.CategoriaId))
-                {
-                    _servicio!.Desactivar(categoria.CategoriaId);
-                    LoadData();
-                    MessageBox.Show("Registro desactivado",
-                        "Mensaje",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                }
-                else
-                {
-                    MessageBox.Show("Registro relacionado\nDesactivación denegada",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-
                 }
             }
             catch (Exception ex)
@@ -315,18 +297,18 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var categoria = (CategoriaListDto)r.Tag;
+            var empleado = (EmpleadoListDto)r.Tag;
 
             try
             {
-                DialogResult dr = MessageBox.Show($@"¿Desea activar la categoría {categoria.NombreCategoria}?",
+                DialogResult dr = MessageBox.Show($@"¿Desea activar el empleado {empleado.Nombre}?",
                         "Confirmar activación",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
                         MessageBoxDefaultButton.Button2);
                 if (dr == DialogResult.Yes)
                 {
-                    _servicio!.Activar(categoria.CategoriaId);
+                    _servicio!.Activar(empleado.EmpleadoId);
                     LoadData();
                     MessageBox.Show("Registro activado",
                         "Mensaje",
