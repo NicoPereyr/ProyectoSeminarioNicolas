@@ -1,5 +1,4 @@
 ﻿using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Datos.Repositorios;
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
@@ -40,14 +39,13 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public void Borrar(int empleadoId)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Existe(Empleado empleado)
         {
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                return _repositorioEmpleados!.Existe(empleado, conn);
+            }
         }
 
         public int GetCantidad(Func<EmpleadoListDto, bool>? filter = null)
@@ -80,7 +78,27 @@ namespace ProyectoSeminario.Servicios.Servicios
 
         public void Guardar(Empleado empleado)
         {
-            throw new NotImplementedException();
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                using (var tran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        if (empleado.EmpleadoId == 0)
+                        {
+                            _repositorioEmpleados!.Agregar(empleado, conn, tran);
+                        }
+
+                        tran.Commit();//guarda efectivamente
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();//tira todo pa tras!!!
+                        throw;
+                    }
+                }
+            }
         }
         public void Editar(Empleado empleadoEditado)
         {

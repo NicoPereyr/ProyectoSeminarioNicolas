@@ -43,8 +43,9 @@ namespace ProyectoSeminario.Windows.Helpers
                 case EmpleadoListDto empleado:
                     r.Cells[0].Value = empleado.Nombre;
                     r.Cells[1].Value = empleado.Apellido;
-                    r.Cells[2].Value = empleado.Documento;
-                    r.Cells[3].Value = empleado.PorcentajeComision;
+                    r.Cells[2].Value=empleado.Activo;
+                    r.Cells[3].Value = empleado.Documento.ToString();
+                    r.Cells[4].Value = empleado.PorcentajeComision.ToString();
                     break;
 
             }

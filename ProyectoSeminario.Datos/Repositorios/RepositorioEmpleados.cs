@@ -11,13 +11,16 @@ namespace ProyectoSeminario.Datos.Repositorios
     {
         public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
-            var insertQuery = @"INSERT INTO Empleados (Nombre, Activo) VALUES 
-                        (@Nombre, @Activo); 
+            var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision) VALUES 
+                        (@Nombre, @Apellido, @Documento, @PorcentajeComision, @Activo); 
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
             int primaryKey = conn.QuerySingle<int>(insertQuery, new
             {
                 Nombre = empleado.Nombre,
+                Apellido = empleado.Apellido,
+                Documento = empleado.Documento,
+                PorcentajeComision=empleado.PorcentajeComision,
                 Activo = empleado.Activo
             }, tran);
 
@@ -83,7 +86,7 @@ namespace ProyectoSeminario.Datos.Repositorios
         public List<EmpleadoListDto> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<EmpleadoListDto, bool>? filter = null, SqlTransaction? tran = null)
         {
             var selectQuery =
-                 @"SELECT e.EmpleadoId, e.Nombre, e.Activo
+                 @"SELECT e.EmpleadoId, e.Nombre, e.Apellido, e.Activo, e.Documento, e.PorcentajeComision
                           FROM Empleados e";
 
             var lista = conn.Query<EmpleadoListDto>(

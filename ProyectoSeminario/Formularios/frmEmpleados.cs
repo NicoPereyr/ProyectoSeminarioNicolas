@@ -139,48 +139,48 @@ namespace ProyectoSeminario.Windows.Formularios
             LoadData(filter);
         }
 
-        //private void tsbAgregar_Click(object sender, EventArgs e)
-        //{
-        //    frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider);
-        //    DialogResult dr = frm.ShowDialog(this);
-        //    if (dr == DialogResult.Cancel) return;
-        //    try
-        //    {
-        //        Empleado? empleado = frm.GetEmpleado();
-        //        if (empleado is null) return;
-        //        if (!_servicio!.Existe(empleado))
-        //        {
-        //            _servicio.Guardar(empleado);
+        private void tsbAgregar_Click(object sender, EventArgs e)
+        {
+            frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider);
+            DialogResult dr = frm.ShowDialog(this);
+            if (dr == DialogResult.Cancel) return;
+            try
+            {
+                Empleado? empleado = frm.GetEmpleado();
+                if (empleado is null) return;
+                if (!_servicio!.Existe(empleado))
+                {
+                    _servicio.Guardar(empleado);
 
 
-        //            totalRecords = _servicio?.GetCantidad() ?? 0;
-        //            totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
-        //            //Preguntar a Carlos sobre línea 159
-        //            currentPage = 1;
-        //            LoadData();
+                    totalRecords = _servicio?.GetCantidad() ?? 0;
+                    totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+                    //Preguntar a Carlos sobre línea 159
+                    currentPage = 1;
+                    LoadData();
 
-        //            MessageBox.Show("Registro agregado",
-        //                "Mensaje",
-        //                MessageBoxButtons.OK,
-        //                MessageBoxIcon.Information);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Registro existente\nAlta denegada",
-        //            "Error",
-        //            MessageBoxButtons.OK,
-        //            MessageBoxIcon.Error);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message,
-        //        "Error",
-        //        MessageBoxButtons.OK,
-        //        MessageBoxIcon.Error);
+                    MessageBox.Show("Registro agregado",
+                        "Mensaje",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Registro existente\nAlta denegada",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
 
-        //    }
-        //}
+            }
+        }
 
         private void tsbFiltrar_Click(object sender, EventArgs e)
         {
@@ -331,5 +331,6 @@ namespace ProyectoSeminario.Windows.Formularios
 
             }
         }
+
     }
 }

@@ -79,6 +79,9 @@ namespace ProyectoSeminario.Windows.Formularios
             {
                 EmpleadoId = empleadoDto.EmpleadoId,
                 Nombre = empleadoDto.Nombre,
+                Apellido = empleadoDto.Apellido,
+                Documento = empleadoDto.Documento,
+                PorcentajeComision = empleadoDto.PorcentajeComision,
                 Activo = true // O toma el valor correspondiente si lo tienes en el DTO
             };
         }

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             dgvDatos = new DataGridView();
-            colEmpleados = new DataGridViewTextBoxColumn();
-            colActivo = new DataGridViewTextBoxColumn();
             topTS = new ToolStrip();
             tsbAgregar = new ToolStripButton();
             tsbDesactivar = new ToolStripButton();
@@ -46,6 +44,11 @@
             label2 = new Label();
             label1 = new Label();
             cboPaginas = new ComboBox();
+            colNombre = new DataGridViewTextBoxColumn();
+            colApellido = new DataGridViewTextBoxColumn();
+            colActivo = new DataGridViewTextBoxColumn();
+            colDocumento = new DataGridViewTextBoxColumn();
+            ColPorcentajeComision = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
             topTS.SuspendLayout();
             panelNavegacion.SuspendLayout();
@@ -57,7 +60,7 @@
             dgvDatos.AllowUserToDeleteRows = false;
             dgvDatos.BackgroundColor = Color.PaleTurquoise;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colEmpleados, colActivo });
+            dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colNombre, colApellido, colActivo, colDocumento, ColPorcentajeComision });
             dgvDatos.Dock = DockStyle.Fill;
             dgvDatos.ImeMode = ImeMode.NoControl;
             dgvDatos.Location = new Point(0, 39);
@@ -68,22 +71,6 @@
             dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(800, 411);
             dgvDatos.TabIndex = 4;
-            // 
-            // colEmpleados
-            // 
-            colEmpleados.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colEmpleados.FillWeight = 159.390884F;
-            colEmpleados.HeaderText = "Empleados";
-            colEmpleados.Name = "colEmpleados";
-            colEmpleados.ReadOnly = true;
-            // 
-            // colActivo
-            // 
-            colActivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colActivo.FillWeight = 40.6091423F;
-            colActivo.HeaderText = "Activo";
-            colActivo.Name = "colActivo";
-            colActivo.ReadOnly = true;
             // 
             // topTS
             // 
@@ -105,6 +92,7 @@
             tsbAgregar.Name = "tsbAgregar";
             tsbAgregar.Size = new Size(36, 36);
             tsbAgregar.Text = "Agregar";
+            tsbAgregar.Click += tsbAgregar_Click;
             // 
             // tsbDesactivar
             // 
@@ -114,6 +102,7 @@
             tsbDesactivar.Name = "tsbDesactivar";
             tsbDesactivar.Size = new Size(36, 36);
             tsbDesactivar.Text = "Desactivar";
+            tsbDesactivar.Click += tsbDesactivar_Click;
             // 
             // tsbActivar
             // 
@@ -123,6 +112,7 @@
             tsbActivar.Name = "tsbActivar";
             tsbActivar.Size = new Size(36, 36);
             tsbActivar.Text = "Activar";
+            tsbActivar.Click += tsbActivar_Click;
             // 
             // tsbEditar
             // 
@@ -132,6 +122,7 @@
             tsbEditar.Name = "tsbEditar";
             tsbEditar.Size = new Size(36, 36);
             tsbEditar.Text = "Editar";
+            tsbEditar.Click += tsbEditar_Click;
             // 
             // tsbFiltrar
             // 
@@ -141,6 +132,7 @@
             tsbFiltrar.Name = "tsbFiltrar";
             tsbFiltrar.Size = new Size(36, 36);
             tsbFiltrar.Text = "Filtrar";
+            tsbFiltrar.Click += tsbFiltrar_Click;
             // 
             // panelNavegacion
             // 
@@ -167,6 +159,7 @@
             btnUltimo.Size = new Size(65, 45);
             btnUltimo.TabIndex = 9;
             btnUltimo.UseVisualStyleBackColor = true;
+            btnUltimo.Click += btnUltimo_Click;
             // 
             // btnSiguiente
             // 
@@ -176,6 +169,7 @@
             btnSiguiente.Size = new Size(65, 45);
             btnSiguiente.TabIndex = 10;
             btnSiguiente.UseVisualStyleBackColor = true;
+            btnSiguiente.Click += btnSiguiente_Click;
             // 
             // btnAnterior
             // 
@@ -185,6 +179,7 @@
             btnAnterior.Size = new Size(65, 45);
             btnAnterior.TabIndex = 11;
             btnAnterior.UseVisualStyleBackColor = true;
+            btnAnterior.Click += btnAnterior_Click;
             // 
             // btnPrimero
             // 
@@ -194,6 +189,7 @@
             btnPrimero.Size = new Size(65, 45);
             btnPrimero.TabIndex = 12;
             btnPrimero.UseVisualStyleBackColor = true;
+            btnPrimero.Click += btnPrimero_Click;
             // 
             // txtCantidadPaginas
             // 
@@ -228,6 +224,40 @@
             cboPaginas.Size = new Size(72, 23);
             cboPaginas.TabIndex = 5;
             // 
+            // colNombre
+            // 
+            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNombre.FillWeight = 159.390884F;
+            colNombre.HeaderText = "Nombre";
+            colNombre.Name = "colNombre";
+            colNombre.ReadOnly = true;
+            // 
+            // colApellido
+            // 
+            colApellido.HeaderText = "Apellido";
+            colApellido.Name = "colApellido";
+            colApellido.ReadOnly = true;
+            // 
+            // colActivo
+            // 
+            colActivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colActivo.FillWeight = 40.6091423F;
+            colActivo.HeaderText = "Activo";
+            colActivo.Name = "colActivo";
+            colActivo.ReadOnly = true;
+            // 
+            // colDocumento
+            // 
+            colDocumento.HeaderText = "Documento";
+            colDocumento.Name = "colDocumento";
+            colDocumento.ReadOnly = true;
+            // 
+            // ColPorcentajeComision
+            // 
+            ColPorcentajeComision.HeaderText = "% Comision";
+            ColPorcentajeComision.Name = "ColPorcentajeComision";
+            ColPorcentajeComision.ReadOnly = true;
+            // 
             // frmEmpleados
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -238,6 +268,7 @@
             Controls.Add(topTS);
             Name = "frmEmpleados";
             Text = "frmEmpleados";
+            Load += frmEmpleados_Load;
             ((System.ComponentModel.ISupportInitialize)dgvDatos).EndInit();
             topTS.ResumeLayout(false);
             topTS.PerformLayout();
@@ -256,8 +287,6 @@
         private ToolStripButton tsbActivar;
         private ToolStripButton tsbEditar;
         private ToolStripButton tsbFiltrar;
-        private DataGridViewTextBoxColumn colEmpleados;
-        private DataGridViewTextBoxColumn colActivo;
         private Panel panelNavegacion;
         private Button btnUltimo;
         private Button btnSiguiente;
@@ -267,5 +296,10 @@
         private Label label2;
         private Label label1;
         private ComboBox cboPaginas;
+        private DataGridViewTextBoxColumn colNombre;
+        private DataGridViewTextBoxColumn colApellido;
+        private DataGridViewTextBoxColumn colActivo;
+        private DataGridViewTextBoxColumn colDocumento;
+        private DataGridViewTextBoxColumn ColPorcentajeComision;
     }
 }
