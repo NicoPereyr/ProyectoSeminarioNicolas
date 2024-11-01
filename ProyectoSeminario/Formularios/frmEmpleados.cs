@@ -220,6 +220,9 @@ namespace ProyectoSeminario.Windows.Formularios
 
                     // Mapear los cambios de la entidad 'Categoria' al DTO 'CategoriaListDto'
                     empleadoDto.Nombre = empleadoEditado.Nombre;
+                    empleadoDto.Apellido= empleadoEditado.Apellido;
+                    empleadoDto.Documento = empleadoEditado.Documento;
+                    empleadoDto.PorcentajeComision=empleadoEditado.PorcentajeComision;
                     // Aquí puedes mapear cualquier otro campo que necesites mostrar en la grilla
 
                     // Verifica si la categoría ya existe (probablemente por el nombre o algún otro criterio)
@@ -265,15 +268,24 @@ namespace ProyectoSeminario.Windows.Formularios
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
             var empleado = (EmpleadoListDto)r.Tag;
-
             try
             {
                 DialogResult dr = MessageBox.Show($@"¿Desea desactivar el empleado {empleado.Nombre}?",
-                        "Confirmar desactivación",
+                        "Confirmar activación",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question,
                         MessageBoxDefaultButton.Button2);
-                if (dr == DialogResult.No)
+                if (dr == DialogResult.Yes)
+                {
+                    _servicio!.Desactivar(empleado.EmpleadoId);
+                    LoadData();
+                    MessageBox.Show("Registro desactivado",
+                        "Mensaje",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                }
+                else
                 {
                     return;
                 }
@@ -287,6 +299,7 @@ namespace ProyectoSeminario.Windows.Formularios
                             MessageBoxIcon.Error);
 
             }
+
         }
 
         private void tsbActivar_Click(object sender, EventArgs e)

@@ -36,7 +36,7 @@ namespace ProyectoSeminario.Datos.Repositorios
 
         public void Editar(Empleado empleadoEditado, SqlConnection conn, SqlTransaction? tran = null)
         {
-            string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre 
+            string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre, Apellido=@Apellido, Documento=@Documento, PorcentajeComision=@PorcentajeComision 
                                     WHERE EmpleadoId=@EmpleadoId";
 
             int registrosAfectados = conn.Execute(updateQuery, empleadoEditado, tran);
@@ -106,11 +106,11 @@ namespace ProyectoSeminario.Datos.Repositorios
             try
             {
                 var updateQuery = @"UPDATE Empleados SET 
-                        Activa = 0 WHERE empleadoId = @EmpleadoId";
+                        Activo = 0 WHERE empleadoId = @EmpleadoId";
 
                 int registrosAfectados = conn.Execute(updateQuery, new
                 {
-                    @CategoriaId = empleadoId,
+                    @EmpleadoId = empleadoId,
                 });
 
                 if (registrosAfectados == 0)
@@ -133,7 +133,7 @@ namespace ProyectoSeminario.Datos.Repositorios
 
                 int registrosAfectados = conn.Execute(updateQuery, new
                 {
-                    @CategoriaId = empleadoId,
+                    @EmpleadoId = empleadoId,
                 });
 
                 if (registrosAfectados == 0)

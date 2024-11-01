@@ -47,6 +47,9 @@ namespace ProyectoSeminario.Windows.Formularios
                     empleado = new Empleado();
                 }
                 empleado.Nombre = txtNombre.Text;
+                empleado.Apellido = txtApellido.Text;
+                empleado.Documento=int.Parse(txtDocumento.Text);
+                empleado.PorcentajeComision=int.Parse(txtPorcentajeComision.Text);
                 empleado.Activo = true;
                 DialogResult = DialogResult.OK;
             }
@@ -93,6 +96,9 @@ namespace ProyectoSeminario.Windows.Formularios
             if (empleado != null)
             {
                 txtNombre.Text = empleado.Nombre;
+                txtApellido.Text=empleado.Apellido;
+                txtDocumento.Text = empleado.Documento.ToString();
+                txtPorcentajeComision.Text = empleado.PorcentajeComision.ToString();
             }
         }
     }
