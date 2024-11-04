@@ -12,7 +12,7 @@ namespace ProyectoSeminario.Datos.Repositorios
         public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
             var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision) VALUES 
-                        (@Nombre, @Apellido, @Documento, @PorcentajeComision, @Activo); 
+                        (@Nombre, @Apellido, @Activo, @Documento, @PorcentajeComision); 
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
             int primaryKey = conn.QuerySingle<int>(insertQuery, new

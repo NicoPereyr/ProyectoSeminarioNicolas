@@ -2,15 +2,6 @@
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ProyectoSeminario.Windows.Formularios
 {
@@ -48,8 +39,8 @@ namespace ProyectoSeminario.Windows.Formularios
                 }
                 empleado.Nombre = txtNombre.Text;
                 empleado.Apellido = txtApellido.Text;
-                empleado.Documento=int.Parse(txtDocumento.Text);
-                empleado.PorcentajeComision=int.Parse(txtPorcentajeComision.Text);
+                empleado.Documento = int.Parse(txtDocumento.Text);
+                empleado.PorcentajeComision = int.Parse(txtPorcentajeComision.Text);
                 empleado.Activo = true;
                 DialogResult = DialogResult.OK;
             }
@@ -96,7 +87,7 @@ namespace ProyectoSeminario.Windows.Formularios
             if (empleado != null)
             {
                 txtNombre.Text = empleado.Nombre;
-                txtApellido.Text=empleado.Apellido;
+                txtApellido.Text = empleado.Apellido;
                 txtDocumento.Text = empleado.Documento.ToString();
                 txtPorcentajeComision.Text = empleado.PorcentajeComision.ToString();
             }

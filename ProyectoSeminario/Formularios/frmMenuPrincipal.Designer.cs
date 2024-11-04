@@ -37,10 +37,10 @@
             btnRestaurar = new PictureBox();
             btnCerrar = new PictureBox();
             btnMaximizar = new PictureBox();
+            btnEmpleados = new Button();
             barraTitulo = new Panel();
             panelContenedorPrincipal = new Panel();
             panelFormHijo = new Panel();
-            btnEmpleados = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)btnMinimizar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)btnRestaurar).BeginInit();
@@ -191,6 +191,23 @@
             btnMaximizar.TabStop = false;
             btnMaximizar.Click += btnMaximizar_Click;
             // 
+            // btnEmpleados
+            // 
+            btnEmpleados.Cursor = Cursors.Hand;
+            btnEmpleados.FlatAppearance.BorderSize = 0;
+            btnEmpleados.FlatStyle = FlatStyle.Flat;
+            btnEmpleados.Font = new Font("Comic Sans MS", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEmpleados.Image = Properties.Resources.icons8_user_96px;
+            btnEmpleados.ImageAlign = ContentAlignment.BottomCenter;
+            btnEmpleados.Location = new Point(0, 433);
+            btnEmpleados.Name = "btnEmpleados";
+            btnEmpleados.Size = new Size(136, 90);
+            btnEmpleados.TabIndex = 0;
+            btnEmpleados.Text = "Empleados";
+            btnEmpleados.TextAlign = ContentAlignment.BottomCenter;
+            btnEmpleados.UseVisualStyleBackColor = true;
+            btnEmpleados.Click += btnEmpleados_Click;
+            // 
             // barraTitulo
             // 
             barraTitulo.BackColor = Color.FromArgb(4, 50, 68);
@@ -221,23 +238,6 @@
             panelFormHijo.Size = new Size(866, 599);
             panelFormHijo.TabIndex = 3;
             panelFormHijo.Visible = false;
-            // 
-            // btnEmpleados
-            // 
-            btnEmpleados.Cursor = Cursors.Hand;
-            btnEmpleados.FlatAppearance.BorderSize = 0;
-            btnEmpleados.FlatStyle = FlatStyle.Flat;
-            btnEmpleados.Font = new Font("Comic Sans MS", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnEmpleados.Image = Properties.Resources.comidas;
-            btnEmpleados.ImageAlign = ContentAlignment.BottomCenter;
-            btnEmpleados.Location = new Point(0, 433);
-            btnEmpleados.Name = "btnEmpleados";
-            btnEmpleados.Size = new Size(136, 90);
-            btnEmpleados.TabIndex = 0;
-            btnEmpleados.Text = "Empleados";
-            btnEmpleados.TextAlign = ContentAlignment.BottomCenter;
-            btnEmpleados.UseVisualStyleBackColor = true;
-            btnEmpleados.Click += btnEmpleados_Click;
             // 
             // frmMenuPrincipal
             // 
