@@ -45,9 +45,10 @@
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(192, 33);
+            txtNombre.Location = new Point(159, 33);
+            txtNombre.MaxLength = 25;
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(156, 23);
+            txtNombre.Size = new Size(216, 23);
             txtNombre.TabIndex = 13;
             // 
             // btnCancelar
@@ -73,7 +74,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(29, 36);
+            label1.Location = new Point(14, 36);
             label1.Name = "label1";
             label1.Size = new Size(51, 15);
             label1.TabIndex = 10;
@@ -81,7 +82,8 @@
             // 
             // txtDocumento
             // 
-            txtDocumento.Location = new Point(192, 132);
+            txtDocumento.Location = new Point(159, 120);
+            txtDocumento.MaxLength = 8;
             txtDocumento.Name = "txtDocumento";
             txtDocumento.Size = new Size(156, 23);
             txtDocumento.TabIndex = 15;
@@ -89,7 +91,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(33, 82);
+            label2.Location = new Point(14, 82);
             label2.Name = "label2";
             label2.Size = new Size(51, 15);
             label2.TabIndex = 14;
@@ -98,7 +100,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(14, 135);
+            label3.Location = new Point(14, 123);
             label3.Name = "label3";
             label3.Size = new Size(70, 15);
             label3.TabIndex = 14;
@@ -106,15 +108,16 @@
             // 
             // txtApellido
             // 
-            txtApellido.Location = new Point(192, 79);
+            txtApellido.Location = new Point(159, 79);
+            txtApellido.MaxLength = 20;
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(156, 23);
+            txtApellido.Size = new Size(216, 23);
             txtApellido.TabIndex = 15;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(14, 178);
+            label4.Location = new Point(12, 166);
             label4.Name = "label4";
             label4.Size = new Size(117, 15);
             label4.TabIndex = 16;
@@ -122,9 +125,10 @@
             // 
             // txtPorcentajeComision
             // 
-            txtPorcentajeComision.Location = new Point(192, 175);
+            txtPorcentajeComision.Location = new Point(159, 163);
+            txtPorcentajeComision.MaxLength = 3;
             txtPorcentajeComision.Name = "txtPorcentajeComision";
-            txtPorcentajeComision.Size = new Size(156, 23);
+            txtPorcentajeComision.Size = new Size(112, 23);
             txtPorcentajeComision.TabIndex = 17;
             // 
             // errorProvider1

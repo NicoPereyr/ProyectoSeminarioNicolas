@@ -48,7 +48,7 @@ namespace ProyectoSeminario.Datos.Repositorios
 
         public bool Existe(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
-            var selectQuery = "SELECT COUNT(*) FROM Empleados WHERE Nombre = @Nombre";
+            var selectQuery = "SELECT COUNT(*) FROM Empleados WHERE Documento= @Documento";
             if (empleado.EmpleadoId != 0)
             {
                 selectQuery += " AND EmpleadoId<>@EmpleadoId";

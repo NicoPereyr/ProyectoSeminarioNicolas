@@ -45,7 +45,7 @@
             cboPaginas = new ComboBox();
             dgvDatos = new DataGridView();
             colCategorias = new DataGridViewTextBoxColumn();
-            colActiva = new DataGridViewTextBoxColumn();
+            colActiva = new DataGridViewCheckBoxColumn();
             topTS.SuspendLayout();
             panelNavegacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
@@ -234,6 +234,8 @@
             colActiva.HeaderText = "Activa";
             colActiva.Name = "colActiva";
             colActiva.ReadOnly = true;
+            colActiva.Resizable = DataGridViewTriState.True;
+            colActiva.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // frmCategorias
             // 
@@ -263,8 +265,6 @@
         private ToolStripButton tsbEditar;
         private Panel panelNavegacion;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colCategorias;
-        private DataGridViewTextBoxColumn colActiva;
         private Button btnUltimo;
         private Button btnSiguiente;
         private Button btnAnterior;
@@ -275,5 +275,7 @@
         private ComboBox cboPaginas;
         private ToolStripButton tsbFiltrar;
         private ToolStripButton tsbActivar;
+        private DataGridViewTextBoxColumn colCategorias;
+        private DataGridViewCheckBoxColumn colActiva;
     }
 }

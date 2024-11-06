@@ -56,7 +56,7 @@
             // 
             // topTS
             // 
-            topTS.BackColor = SystemColors.ControlLight;
+            topTS.BackColor = Color.PaleTurquoise;
             topTS.ImageScalingSize = new Size(32, 32);
             topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbEditar, tsbFiltrar, tsbBorrar, tsbActivar });
             topTS.Location = new Point(0, 0);
@@ -113,7 +113,7 @@
             // 
             // panelNavegacion
             // 
-            panelNavegacion.BackColor = SystemColors.ControlLight;
+            panelNavegacion.BackColor = Color.PaleTurquoise;
             panelNavegacion.Controls.Add(btnUltimo);
             panelNavegacion.Controls.Add(btnSiguiente);
             panelNavegacion.Controls.Add(btnAnterior);
@@ -206,6 +206,7 @@
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
             dgvDatos.Anchor = AnchorStyles.Left;
+            dgvDatos.BackgroundColor = Color.PaleTurquoise;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDatos.Columns.AddRange(new DataGridViewColumn[] { colProductos, colCategoria, colPrecio, colActiva });
             dgvDatos.Location = new Point(0, 42);

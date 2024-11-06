@@ -29,17 +29,13 @@
         private void InitializeComponent()
         {
             dgvDatos = new DataGridView();
-            colNombre = new DataGridViewTextBoxColumn();
-            colApellido = new DataGridViewTextBoxColumn();
-            colActivo = new DataGridViewTextBoxColumn();
-            colDocumento = new DataGridViewTextBoxColumn();
-            ColPorcentajeComision = new DataGridViewTextBoxColumn();
             topTS = new ToolStrip();
             tsbAgregar = new ToolStripButton();
             tsbDesactivar = new ToolStripButton();
             tsbActivar = new ToolStripButton();
             tsbEditar = new ToolStripButton();
             tsbFiltrar = new ToolStripButton();
+            tsbRefrescar = new ToolStripButton();
             panelNavegacion = new Panel();
             btnUltimo = new Button();
             btnSiguiente = new Button();
@@ -49,7 +45,11 @@
             label2 = new Label();
             label1 = new Label();
             cboPaginas = new ComboBox();
-            tsbRefrescar = new ToolStripButton();
+            colNombre = new DataGridViewTextBoxColumn();
+            colApellido = new DataGridViewTextBoxColumn();
+            colActivo = new DataGridViewCheckBoxColumn();
+            colDocumento = new DataGridViewTextBoxColumn();
+            ColPorcentajeComision = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
             topTS.SuspendLayout();
             panelNavegacion.SuspendLayout();
@@ -72,40 +72,6 @@
             dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(800, 411);
             dgvDatos.TabIndex = 4;
-            // 
-            // colNombre
-            // 
-            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNombre.FillWeight = 159.390884F;
-            colNombre.HeaderText = "Nombre";
-            colNombre.Name = "colNombre";
-            colNombre.ReadOnly = true;
-            // 
-            // colApellido
-            // 
-            colApellido.HeaderText = "Apellido";
-            colApellido.Name = "colApellido";
-            colApellido.ReadOnly = true;
-            // 
-            // colActivo
-            // 
-            colActivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colActivo.FillWeight = 40.6091423F;
-            colActivo.HeaderText = "Activo";
-            colActivo.Name = "colActivo";
-            colActivo.ReadOnly = true;
-            // 
-            // colDocumento
-            // 
-            colDocumento.HeaderText = "Documento";
-            colDocumento.Name = "colDocumento";
-            colDocumento.ReadOnly = true;
-            // 
-            // ColPorcentajeComision
-            // 
-            ColPorcentajeComision.HeaderText = "% Comision";
-            ColPorcentajeComision.Name = "ColPorcentajeComision";
-            ColPorcentajeComision.ReadOnly = true;
             // 
             // topTS
             // 
@@ -168,6 +134,15 @@
             tsbFiltrar.Size = new Size(36, 36);
             tsbFiltrar.Text = "Filtrar";
             tsbFiltrar.Click += tsbFiltrar_Click;
+            // 
+            // tsbRefrescar
+            // 
+            tsbRefrescar.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbRefrescar.Image = Properties.Resources.icons8_synchronize_96px;
+            tsbRefrescar.ImageTransparentColor = Color.Magenta;
+            tsbRefrescar.Name = "tsbRefrescar";
+            tsbRefrescar.Size = new Size(36, 36);
+            tsbRefrescar.Text = "tsbRefrescar";
             // 
             // panelNavegacion
             // 
@@ -259,14 +234,41 @@
             cboPaginas.Size = new Size(72, 23);
             cboPaginas.TabIndex = 5;
             // 
-            // tsbRefrescar
+            // colNombre
             // 
-            tsbRefrescar.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            tsbRefrescar.Image = Properties.Resources.icons8_synchronize_96px;
-            tsbRefrescar.ImageTransparentColor = Color.Magenta;
-            tsbRefrescar.Name = "tsbRefrescar";
-            tsbRefrescar.Size = new Size(36, 36);
-            tsbRefrescar.Text = "tsbRefrescar";
+            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNombre.FillWeight = 159.390884F;
+            colNombre.HeaderText = "Nombre";
+            colNombre.Name = "colNombre";
+            colNombre.ReadOnly = true;
+            // 
+            // colApellido
+            // 
+            colApellido.HeaderText = "Apellido";
+            colApellido.Name = "colApellido";
+            colApellido.ReadOnly = true;
+            // 
+            // colActivo
+            // 
+            colActivo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colActivo.FillWeight = 40.6091423F;
+            colActivo.HeaderText = "Activo";
+            colActivo.Name = "colActivo";
+            colActivo.ReadOnly = true;
+            colActivo.Resizable = DataGridViewTriState.True;
+            colActivo.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // colDocumento
+            // 
+            colDocumento.HeaderText = "Documento";
+            colDocumento.Name = "colDocumento";
+            colDocumento.ReadOnly = true;
+            // 
+            // ColPorcentajeComision
+            // 
+            ColPorcentajeComision.HeaderText = "% Comision";
+            ColPorcentajeComision.Name = "ColPorcentajeComision";
+            ColPorcentajeComision.ReadOnly = true;
             // 
             // frmEmpleados
             // 
@@ -306,11 +308,11 @@
         private Label label2;
         private Label label1;
         private ComboBox cboPaginas;
+        private ToolStripButton tsbRefrescar;
         private DataGridViewTextBoxColumn colNombre;
         private DataGridViewTextBoxColumn colApellido;
-        private DataGridViewTextBoxColumn colActivo;
+        private DataGridViewCheckBoxColumn colActivo;
         private DataGridViewTextBoxColumn colDocumento;
         private DataGridViewTextBoxColumn ColPorcentajeComision;
-        private ToolStripButton tsbRefrescar;
     }
 }

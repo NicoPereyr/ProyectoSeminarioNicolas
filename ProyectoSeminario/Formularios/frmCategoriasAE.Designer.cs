@@ -40,13 +40,14 @@
             // txtNombreCategoria
             // 
             txtNombreCategoria.Location = new Point(87, 28);
+            txtNombreCategoria.MaxLength = 20;
             txtNombreCategoria.Name = "txtNombreCategoria";
-            txtNombreCategoria.Size = new Size(156, 23);
+            txtNombreCategoria.Size = new Size(269, 23);
             txtNombreCategoria.TabIndex = 9;
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(26, 89);
+            btnCancelar.Location = new Point(71, 89);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 44);
             btnCancelar.TabIndex = 8;
@@ -56,7 +57,7 @@
             // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(168, 89);
+            btnAceptar.Location = new Point(281, 89);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 44);
             btnAceptar.TabIndex = 7;
@@ -82,7 +83,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(274, 157);
+            ClientSize = new Size(387, 157);
             Controls.Add(txtNombreCategoria);
             Controls.Add(btnCancelar);
             Controls.Add(btnAceptar);
