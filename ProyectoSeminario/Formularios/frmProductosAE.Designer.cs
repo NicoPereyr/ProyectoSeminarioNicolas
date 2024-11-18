@@ -35,12 +35,18 @@
             btnCancelar = new Button();
             label2 = new Label();
             label3 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
+            txtNombre = new TextBox();
+            txtDescripcion = new TextBox();
+            txtPrecio = new TextBox();
             cboCategorias = new ComboBox();
             label4 = new Label();
+            groupBox1 = new GroupBox();
+            picImagen = new PictureBox();
+            btnBuscarImagen = new Button();
+            openFileDialog1 = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picImagen).BeginInit();
             SuspendLayout();
             // 
             // errorProvider1
@@ -58,7 +64,7 @@
             // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(268, 204);
+            btnAceptar.Location = new Point(270, 235);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 44);
             btnAceptar.TabIndex = 1;
@@ -68,7 +74,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(107, 204);
+            btnCancelar.Location = new Point(107, 235);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 44);
             btnCancelar.TabIndex = 2;
@@ -79,7 +85,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(32, 142);
+            label2.Location = new Point(32, 172);
             label2.Name = "label2";
             label2.Size = new Size(69, 15);
             label2.TabIndex = 3;
@@ -88,37 +94,42 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(32, 65);
+            label3.Location = new Point(32, 71);
             label3.Name = "label3";
             label3.Size = new Size(40, 15);
             label3.TabIndex = 4;
             label3.Text = "Precio";
             // 
-            // textBox1
+            // txtNombre
             // 
-            textBox1.Location = new Point(107, 26);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(87, 23);
-            textBox1.TabIndex = 5;
+            txtNombre.Location = new Point(107, 26);
+            txtNombre.MaxLength = 20;
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(193, 23);
+            txtNombre.TabIndex = 5;
             // 
-            // textBox2
+            // txtDescripcion
             // 
-            textBox2.Location = new Point(107, 139);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(320, 23);
-            textBox2.TabIndex = 5;
+            txtDescripcion.Location = new Point(107, 164);
+            txtDescripcion.MaxLength = 250;
+            txtDescripcion.Multiline = true;
+            txtDescripcion.Name = "txtDescripcion";
+            txtDescripcion.Size = new Size(320, 65);
+            txtDescripcion.TabIndex = 5;
             // 
-            // textBox3
+            // txtPrecio
             // 
-            textBox3.Location = new Point(107, 62);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(87, 23);
-            textBox3.TabIndex = 5;
+            txtPrecio.Location = new Point(107, 68);
+            txtPrecio.MaxLength = 10;
+            txtPrecio.Name = "txtPrecio";
+            txtPrecio.Size = new Size(87, 23);
+            txtPrecio.TabIndex = 5;
             // 
             // cboCategorias
             // 
+            cboCategorias.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCategorias.FormattingEnabled = true;
-            cboCategorias.Location = new Point(107, 99);
+            cboCategorias.Location = new Point(107, 111);
             cboCategorias.Name = "cboCategorias";
             cboCategorias.Size = new Size(121, 23);
             cboCategorias.TabIndex = 6;
@@ -126,22 +137,56 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(32, 102);
+            label4.Location = new Point(32, 119);
             label4.Name = "label4";
             label4.Size = new Size(58, 15);
             label4.TabIndex = 4;
             label4.Text = "Categoría";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(picImagen);
+            groupBox1.Location = new Point(306, 7);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(143, 110);
+            groupBox1.TabIndex = 7;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Imagen";
+            // 
+            // picImagen
+            // 
+            picImagen.Location = new Point(0, 14);
+            picImagen.Name = "picImagen";
+            picImagen.Size = new Size(143, 83);
+            picImagen.TabIndex = 0;
+            picImagen.TabStop = false;
+            // 
+            // btnBuscarImagen
+            // 
+            btnBuscarImagen.Location = new Point(337, 119);
+            btnBuscarImagen.Name = "btnBuscarImagen";
+            btnBuscarImagen.Size = new Size(75, 39);
+            btnBuscarImagen.TabIndex = 8;
+            btnBuscarImagen.Text = "Buscar";
+            btnBuscarImagen.UseVisualStyleBackColor = true;
+            btnBuscarImagen.Click += btnBuscarImagen_Click;
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
             // 
             // frmProductosAE
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(461, 274);
+            ClientSize = new Size(500, 300);
+            Controls.Add(btnBuscarImagen);
+            Controls.Add(groupBox1);
             Controls.Add(cboCategorias);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(txtPrecio);
+            Controls.Add(txtDescripcion);
+            Controls.Add(txtNombre);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -149,13 +194,14 @@
             Controls.Add(btnAceptar);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.None;
-            MaximumSize = new Size(461, 274);
-            MinimumSize = new Size(461, 274);
+            MaximumSize = new Size(500, 300);
+            MinimumSize = new Size(500, 300);
             Name = "frmProductosAE";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "frmProductosAE";
-            Load += frmProductosAE_Load;
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
+            groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picImagen).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -165,13 +211,17 @@
         private ErrorProvider errorProvider1;
         private Label label1;
         private ComboBox cboCategorias;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox1;
+        private TextBox txtPrecio;
+        private TextBox txtDescripcion;
+        private TextBox txtNombre;
         private Label label4;
         private Label label3;
         private Label label2;
         private Button btnCancelar;
         private Button btnAceptar;
+        private GroupBox groupBox1;
+        private PictureBox picImagen;
+        private Button btnBuscarImagen;
+        private OpenFileDialog openFileDialog1;
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ProyectoSeminario.Entidades.Dtos;
+using ProyectoSeminario.Servicios.Interfaces;
 
 namespace ProyectoSeminario.Windows.Helpers
 {
@@ -17,7 +15,23 @@ namespace ProyectoSeminario.Windows.Helpers
             {
                 cbo.Items.Add(i.ToString());
             }
-
+        }
+        public static void CargarComboCategorias(ref ComboBox cbo,
+    IServiceProvider? serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+            IServiciosCategorias? servicio = _serviceProvider?.GetService<IServiciosCategorias>();
+            var listaCategorias = servicio?.GetCategoriasActivasComboBox();
+            var defaultCategoria = new CategoriaListDto()
+            {
+                CategoriaId = 0,
+                NombreCategoria = "Seleccione"
+            };
+            listaCategorias?.Insert(0, defaultCategoria);
+            cbo.DataSource = listaCategorias;
+            cbo.DisplayMember = "NombreCategoria";
+            cbo.ValueMember = "CategoriaId";
+            cbo.SelectedIndex = 0;
         }
     }
 }

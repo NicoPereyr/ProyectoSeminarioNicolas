@@ -135,5 +135,14 @@ namespace ProyectoSeminario.Servicios.Servicios
                 }
             }
         }
+
+        public List<CategoriaListDto> GetCategoriasActivasComboBox()
+        {
+            using (var conn = new SqlConnection(_cadena))
+            {
+                conn.Open();
+                return _repositorioCategorias.GetCategoriasActivasComboBox(conn);
+            }
+        }
     }
 }

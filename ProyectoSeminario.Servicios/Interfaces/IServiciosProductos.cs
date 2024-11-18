@@ -1,18 +1,13 @@
 ﻿using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProyectoSeminario.Servicios.Interfaces
 {
     public interface IServiciosProductos
     {
-        void Borrar(int productoId);
-        //bool EstaRelacionado(int productoId);
+        void Desactivar(int productoId);
+        void Activar(int productoId);
+        void Editar(Producto productoEditado);
         bool Existe(Producto producto);
         List<ProductoListDto> GetLista(int currentPage, int pageSize, Func<ProductoListDto, bool>? filter = null);
         void Guardar(Producto producto);

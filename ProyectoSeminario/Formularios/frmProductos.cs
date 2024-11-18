@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProyectoSeminario.Entidades.Dtos;
+using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
 using ProyectoSeminario.Windows.Helpers;
-using System.Windows.Forms;
 
 namespace ProyectoSeminario.Windows.Formularios
 {
@@ -14,7 +14,7 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private int currentPage = 1;//pagina actual
         private int totalPages = 0;//total de paginas
-        private int pageSize = 10;//registros por página
+        private int pageSize = 14;//registros por página
         private int totalRecords = 0;//cantidad de registros
 
         private Func<ProductoListDto, bool>? filter = null;
@@ -140,81 +140,236 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private void tsbAgregar_Click(object sender, EventArgs e)
         {
-            frmProductosAE frm = new frmProductosAE();
-            frm.ShowDialog();
+            frmProductosAE frm = new frmProductosAE(_serviceProvider)
+            { Text = "Agregar producto" };
+            DialogResult dr = frm.ShowDialog(this);
+            if (dr == DialogResult.Cancel) { return; }
+            try
+            {
+                Producto producto = frm.GetProducto();
+
+                if (!_servicio!.Existe(producto))
+                {
+                    _servicio!.Guardar(producto);
+                    totalRecords = _servicio?.GetCantidad() ?? 0;
+                    totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+                    //Preguntar a Carlos sobre línea de abajo
+                    currentPage = 1;
+                    LoadData();
+
+                    MessageBox.Show("Registro agregado",
+                        "Mensaje",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                }
+                else
+                {
+                    MessageBox.Show("Registro Duplicado!!!",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
-        //private void tsbNuevo_Click(object sender, EventArgs e)
-        //{
+        private void tsbBuscar_Click(object sender, EventArgs e)
+        {
+            frmFiltroTexto frm = new frmFiltroTexto() { Text = "Ingresar texto para buscar por producto" };
+            DialogResult dr = frm.ShowDialog(this);
+            try
+            {
+                var textoFiltro = frm.GetTexto();
+                if (textoFiltro is null || textoFiltro == string.Empty)
+                {
+                    return;
+                }
+                filter = e => e.Nombre.ToUpper()
+                    .Contains(textoFiltro.ToUpper());
+                totalRecords = _servicio!.GetCantidad(filter);
+                currentPage = 1;
+                if (totalRecords > 0)
+                {
+                    totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+                    tsbBuscar.Enabled = false;
+                    tsbBuscar.BackColor = Color.FromArgb(41, 43, 39);
+                    LoadData(filter);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron registros!!!", "Mensaje",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    filter = null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-        //    frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider) { Text = "Agregar Empleado" };
-        //    DialogResult dr = frm.ShowDialog(this);
-        //    if (dr == DialogResult.Cancel) return;
-        //    Empleado? empleado = frm.GetEmpleado();
-        //    if (empleado is null) return;
-        //    try
-        //    {
-        //        if (_servicio is null)
-        //        {
-        //            throw new ApplicationException("Dependencias no cargadas");
-        //        }
-        //        _servicio.Guardar(empleado);
-        //    }
-        //    catch (Exception)
-        //    {
+        private void tsbRefrescar_Click(object sender, EventArgs e)
+        {
+            filter = null;
+            currentPage = 1;
+            tsbBuscar.Enabled = true;
+            tsbFiltrar.Enabled = true;
+            tsbBuscar.BackColor = Color.FromArgb(159, 188, 32);
+            tsbFiltrar.BackColor = Color.FromArgb(159, 188, 32);
+            RecargarGrilla();
+        }
 
-        //        throw;
-        //    }
+        private void tsbDesactivar_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.SelectedRows.Count == 0)
+            {
+                return;
+            }
+            var r = dgvDatos.SelectedRows[0];
+            if (r.Tag is null) return;
+            var producto = (ProductoListDto)r.Tag;
 
-        //}
+            try
+            {
+                DialogResult dr = MessageBox.Show($@"¿Desea desactivar el producto {producto.Nombre}?",
+                        "Confirmar desactivación",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button2);
+                if (dr == DialogResult.Yes)
+                {
+                    _servicio!.Desactivar(producto.ProductoId);
+                    LoadData();
+                    MessageBox.Show("Registro desactivado",
+                        "Mensaje",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //private void tsbActualizar_Click(object sender, EventArgs e)
-        //{
-        //    filter = null;
-        //    currentPage = 1;
-        //    tsbFiltrar.Enabled = true;
-        //    tsbFiltrar.BackColor = SystemColors.Control;
-        //    RecargarGrilla();
-        //}
+                MessageBox.Show(ex.Message,
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
 
+            }
+        }
 
-        //private void tsbFiltrar_Click(object sender, EventArgs e)
-        //{
-        //    frmFiltroTexto frm = new frmFiltroTexto() { Text = "Ingresar texto para buscar por apellido" };
-        //    DialogResult dr = frm.ShowDialog(this);
-        //    try
-        //    {
-        //        var textoFiltro = frm.GetTexto();
-        //        if (textoFiltro is null || textoFiltro == string.Empty)
-        //        {
-        //            return;
-        //        }
-        //        filter = e => e.Apellido.ToUpper()
-        //            .Contains(textoFiltro.ToUpper());
-        //        totalRecords = _servicio!.GetCantidad(filter);
-        //        currentPage = 1;
-        //        if (totalRecords > 0)
-        //        {
-        //            totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
-        //            tsbFiltrar.Enabled = false;
-        //            tsbFiltrar.BackColor = Color.Orange;
+        private void tsbActivar_Click(object sender, EventArgs e)
+        {
+            if (dgvDatos.SelectedRows.Count == 0)
+            {
+                return;
+            }
+            var r = dgvDatos.SelectedRows[0];
+            if (r.Tag is null) return;
+            var producto = (ProductoListDto)r.Tag;
 
-        //            LoadData(filter);
+            try
+            {
+                DialogResult dr = MessageBox.Show($@"¿Desea activar el producto {producto.Nombre}?",
+                        "Confirmar activación",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question,
+                        MessageBoxDefaultButton.Button2);
+                if (dr == DialogResult.Yes)
+                {
+                    _servicio!.Activar(producto.ProductoId);
+                    LoadData();
+                    MessageBox.Show("Registro activado",
+                        "Mensaje",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
-        //        }
-        //        else
-        //        {
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //            MessageBox.Show("No se encontraron registros!!!", "Mensaje",
-        //                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //            filter = null;
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
+                MessageBox.Show(ex.Message,
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
 
-        //        throw;
-        //    }
+            }
+        }
+
+        private void tsbEditar_Click(object sender, EventArgs e)
+        {
+            //Conteo de fila seleccionada
+            if (dgvDatos.SelectedRows.Count == 0)
+            {
+                return;
+            }
+            try
+            {
+                var r = dgvDatos.SelectedRows[0];
+                if (r.Tag != null)
+                {
+                    var productoDto = (ProductoListDto)r.Tag;
+
+                    frmProductosAE frm = new frmProductosAE(_serviceProvider) { Text = "Editar producto" };
+                    frm.SetProductoDto(productoDto);
+                    DialogResult dr = frm.ShowDialog(this);
+
+                    if (dr == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    var productoEditado = frm.GetProducto();
+
+                    if (productoEditado == null)
+                    {
+                        throw new Exception("Error al recuperar la categoría editada.");
+                    }
+
+                    productoEditado.Nombre = productoEditado.Nombre;
+
+                    if (!_servicio!.Existe(productoEditado))
+                    {
+                        _servicio.Editar(productoEditado);
+
+                        GridHelper.SetearFila(r, productoDto);
+                        LoadData();
+                        MessageBox.Show("Producto editado",
+                            "Mensaje",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Registro existente\nEdición denegada",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al editar el producto: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
     }
 }

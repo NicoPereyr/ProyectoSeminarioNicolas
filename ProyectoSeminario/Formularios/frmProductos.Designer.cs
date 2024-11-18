@@ -35,6 +35,7 @@
             tsbFiltrar = new ToolStripButton();
             tsbBorrar = new ToolStripButton();
             tsbActivar = new ToolStripButton();
+            tsbBuscar = new ToolStripButton();
             panelNavegacion = new Panel();
             btnUltimo = new Button();
             btnSiguiente = new Button();
@@ -58,7 +59,7 @@
             // 
             topTS.BackColor = Color.PaleTurquoise;
             topTS.ImageScalingSize = new Size(32, 32);
-            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbEditar, tsbFiltrar, tsbBorrar, tsbActivar });
+            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbEditar, tsbFiltrar, tsbBorrar, tsbActivar, tsbBuscar });
             topTS.Location = new Point(0, 0);
             topTS.Name = "topTS";
             topTS.Size = new Size(800, 39);
@@ -83,6 +84,7 @@
             tsbEditar.Name = "tsbEditar";
             tsbEditar.Size = new Size(36, 36);
             tsbEditar.Text = "Editar";
+            tsbEditar.Click += tsbEditar_Click;
             // 
             // tsbFiltrar
             // 
@@ -101,6 +103,7 @@
             tsbBorrar.Name = "tsbBorrar";
             tsbBorrar.Size = new Size(36, 36);
             tsbBorrar.Text = "Desactivar";
+            tsbBorrar.Click += tsbDesactivar_Click;
             // 
             // tsbActivar
             // 
@@ -110,6 +113,17 @@
             tsbActivar.Name = "tsbActivar";
             tsbActivar.Size = new Size(36, 36);
             tsbActivar.Text = "Activar";
+            tsbActivar.Click += tsbActivar_Click;
+            // 
+            // tsbBuscar
+            // 
+            tsbBuscar.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbBuscar.Image = Properties.Resources.icons8_search_96px;
+            tsbBuscar.ImageTransparentColor = Color.Magenta;
+            tsbBuscar.Name = "tsbBuscar";
+            tsbBuscar.Size = new Size(36, 36);
+            tsbBuscar.Text = "Buscar";
+            tsbBuscar.Click += tsbBuscar_Click;
             // 
             // panelNavegacion
             // 
@@ -214,6 +228,7 @@
             dgvDatos.Name = "dgvDatos";
             dgvDatos.ReadOnly = true;
             dgvDatos.RowHeadersVisible = false;
+            dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(800, 325);
             dgvDatos.TabIndex = 3;
             // 
@@ -292,5 +307,6 @@
         private ComboBox cboPaginas;
         private ToolStripButton tsbFiltrar;
         private ToolStripButton tsbActivar;
+        private ToolStripButton tsbBuscar;
     }
 }

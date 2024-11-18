@@ -26,5 +26,6 @@ namespace ProyectoSeminario.Datos.Interfaces
             SqlConnection conn, SqlTransaction? tran = null);
 
         bool EstaRelacionada(int categoriaId, SqlConnection conn);
+        public List<CategoriaListDto> GetCategoriasActivasComboBox(SqlConnection conn);
     }
 }

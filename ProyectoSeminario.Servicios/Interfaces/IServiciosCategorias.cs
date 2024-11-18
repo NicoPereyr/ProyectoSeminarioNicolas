@@ -12,7 +12,7 @@ namespace ProyectoSeminario.Servicios.Interfaces
         void Guardar(Categoria categoria);
         Categoria? GetCategoriaPorId(int categoriaId);
         int GetCantidad(Func<CategoriaListDto, bool>? filter = null);
-
+        List<CategoriaListDto>GetCategoriasActivasComboBox();
         bool EstaRelacionada(int categoriaId);
         void Editar(Categoria categoriaEditada);
     }

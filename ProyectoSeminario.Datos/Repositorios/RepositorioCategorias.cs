@@ -166,5 +166,12 @@ namespace ProyectoSeminario.Datos.Repositorios
                 throw new Exception("Error en el repo", ex);
             }
         }
+        public List<CategoriaListDto> GetCategoriasActivasComboBox(SqlConnection conn)
+        {
+            var selectQuery =
+                 @"SELECT CategoriaId, NombreCategoria
+         FROM Categorias WHERE Categorias.Activa = 1";
+            return conn.Query<CategoriaListDto>(selectQuery).ToList();
+        }
     }
 }
