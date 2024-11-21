@@ -8,11 +8,11 @@ namespace ProyectoSeminario.Servicios.Interfaces
         void Desactivar(int categoriaId);
         void Activar(int categoriaId);
         bool Existe(Categoria categoria);
-        List<CategoriaListDto> GetLista(int currentPage, int pageSize, Func<CategoriaListDto, bool>? filter = null);
+        List<Categoria> GetLista(int currentPage, int pageSize, Func<Categoria, bool>? filter = null);
         void Guardar(Categoria categoria);
         Categoria? GetCategoriaPorId(int categoriaId);
-        int GetCantidad(Func<CategoriaListDto, bool>? filter = null);
-        List<CategoriaListDto>GetCategoriasActivasComboBox();
+        int GetCantidad(Func<Categoria, bool>? filter = null);
+        List<Categoria>GetCategoriasActivasComboBox();
         bool EstaRelacionada(int categoriaId);
         void Editar(Categoria categoriaEditada);
     }

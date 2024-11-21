@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace ProyectoSeminario.Windows.Formularios
 {
@@ -27,7 +25,7 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            Close();
+            DialogResult = DialogResult.Cancel;
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -51,19 +49,19 @@ namespace ProyectoSeminario.Windows.Formularios
         {
             bool valido = true;
             errorProvider1.Clear();
-            if (string.IsNullOrEmpty(txtNombre.Text) 
+            if (string.IsNullOrEmpty(txtNombre.Text)
                 || !System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
             {
                 valido = false;
                 errorProvider1.SetError(txtNombre, "Nombre del empleado es requerido");
             }
-            if (string.IsNullOrEmpty(txtApellido.Text) 
+            if (string.IsNullOrEmpty(txtApellido.Text)
                 || !System.Text.RegularExpressions.Regex.IsMatch(txtApellido.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
             {
                 valido = false;
                 errorProvider1.SetError(txtApellido, "Apellido del empleado es requerido");
             }
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtDocumento.Text,@"\d{8}$") 
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtDocumento.Text, @"\d{8}$")
                 || !int.TryParse(txtDocumento.Text, out _))
             {
                 valido = false;
@@ -71,7 +69,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             if (string.IsNullOrEmpty(txtPorcentajeComision.Text)
                 || !int.TryParse(txtPorcentajeComision.Text, out var comision)
-                || comision<0 || comision>100)
+                || comision < 0 || comision > 100)
             {
                 valido = false;
                 errorProvider1.SetError(txtPorcentajeComision, "Porcentaje de comisión es requerido");
@@ -90,7 +88,7 @@ namespace ProyectoSeminario.Windows.Formularios
             return empleado;
         }
 
-        public void SetEmpleadoDto(EmpleadoListDto empleadoDto)
+        public void SetEmpleadoDto(Empleado empleadoDto)
         {
             this.empleado = new Empleado
             {

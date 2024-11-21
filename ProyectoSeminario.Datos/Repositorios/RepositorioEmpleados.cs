@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace ProyectoSeminario.Datos.Repositorios
 {
@@ -12,7 +10,7 @@ namespace ProyectoSeminario.Datos.Repositorios
         public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
             var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision) VALUES 
-                        (@Nombre, @Apellido, @Activo, @Documento, @PorcentajeComision); 
+                        (@Nombre, @Apellido, @Activo, @Documento, @PorcentajeComision, @Sexo); 
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 
             int primaryKey = conn.QuerySingle<int>(insertQuery, new
@@ -20,8 +18,9 @@ namespace ProyectoSeminario.Datos.Repositorios
                 Nombre = empleado.Nombre,
                 Apellido = empleado.Apellido,
                 Documento = empleado.Documento,
-                PorcentajeComision=empleado.PorcentajeComision,
-                Activo = empleado.Activo
+                PorcentajeComision = empleado.PorcentajeComision,
+                Activo = empleado.Activo,
+                Sexo = empleado.Sexo
             }, tran);
 
             if (primaryKey > 0)
@@ -36,7 +35,7 @@ namespace ProyectoSeminario.Datos.Repositorios
 
         public void Editar(Empleado empleadoEditado, SqlConnection conn, SqlTransaction? tran = null)
         {
-            string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre, Apellido=@Apellido, Documento=@Documento, PorcentajeComision=@PorcentajeComision 
+            string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre, Apellido=@Apellido, Documento=@Documento, PorcentajeComision=@PorcentajeComision, Sexo=@Sexo 
                                     WHERE EmpleadoId=@EmpleadoId";
 
             int registrosAfectados = conn.Execute(updateQuery, empleadoEditado, tran);
@@ -57,10 +56,10 @@ namespace ProyectoSeminario.Datos.Repositorios
             return conn.QuerySingle<int>(selectQuery, empleado) > 0;
         }
 
-        public int GetCantidad(SqlConnection conn, Func<EmpleadoListDto, bool>? filter = null, SqlTransaction? tran = null)
+        public int GetCantidad(SqlConnection conn, Func<Empleado, bool>? filter = null, SqlTransaction? tran = null)
         {
             var selectQuery = @"SELECT * FROM Empleados";
-            var query = conn.Query<EmpleadoListDto>(selectQuery).ToList();
+            var query = conn.Query<Empleado>(selectQuery).ToList();
             if (filter != null)
             {
                 query = query.Where(filter).ToList();
@@ -83,13 +82,13 @@ namespace ProyectoSeminario.Datos.Repositorios
             return empleado;
         }
 
-        public List<EmpleadoListDto> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<EmpleadoListDto, bool>? filter = null, SqlTransaction? tran = null)
+        public List<Empleado> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<Empleado, bool>? filter = null, SqlTransaction? tran = null)
         {
             var selectQuery =
-                 @"SELECT e.EmpleadoId, e.Nombre, e.Apellido, e.Activo, e.Documento, e.PorcentajeComision
+                 @"SELECT e.EmpleadoId, e.Nombre, e.Apellido, e.Activo, e.Documento, e.PorcentajeComision, e.Sexo
                           FROM Empleados e";
 
-            var lista = conn.Query<EmpleadoListDto>(
+            var lista = conn.Query<Empleado>(
                 selectQuery,
                 transaction: tran
             ).ToList();

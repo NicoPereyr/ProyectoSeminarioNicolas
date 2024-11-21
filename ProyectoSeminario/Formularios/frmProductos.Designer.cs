@@ -36,6 +36,7 @@
             tsbBorrar = new ToolStripButton();
             tsbActivar = new ToolStripButton();
             tsbBuscar = new ToolStripButton();
+            tsbRefrescar = new ToolStripButton();
             panelNavegacion = new Panel();
             btnUltimo = new Button();
             btnSiguiente = new Button();
@@ -49,7 +50,7 @@
             colProductos = new DataGridViewTextBoxColumn();
             colCategoria = new DataGridViewTextBoxColumn();
             colPrecio = new DataGridViewTextBoxColumn();
-            colActiva = new DataGridViewTextBoxColumn();
+            colActiva = new DataGridViewCheckBoxColumn();
             topTS.SuspendLayout();
             panelNavegacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
@@ -59,7 +60,7 @@
             // 
             topTS.BackColor = Color.PaleTurquoise;
             topTS.ImageScalingSize = new Size(32, 32);
-            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbEditar, tsbFiltrar, tsbBorrar, tsbActivar, tsbBuscar });
+            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbEditar, tsbFiltrar, tsbBorrar, tsbActivar, tsbBuscar, tsbRefrescar });
             topTS.Location = new Point(0, 0);
             topTS.Name = "topTS";
             topTS.Size = new Size(800, 39);
@@ -124,6 +125,16 @@
             tsbBuscar.Size = new Size(36, 36);
             tsbBuscar.Text = "Buscar";
             tsbBuscar.Click += tsbBuscar_Click;
+            // 
+            // tsbRefrescar
+            // 
+            tsbRefrescar.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbRefrescar.Image = Properties.Resources.icons8_synchronize_96px;
+            tsbRefrescar.ImageTransparentColor = Color.Magenta;
+            tsbRefrescar.Name = "tsbRefrescar";
+            tsbRefrescar.Size = new Size(36, 36);
+            tsbRefrescar.Text = "toolStripButton1";
+            tsbRefrescar.Click += tsbRefrescar_Click;
             // 
             // panelNavegacion
             // 
@@ -262,6 +273,8 @@
             colActiva.HeaderText = "Activo";
             colActiva.Name = "colActiva";
             colActiva.ReadOnly = true;
+            colActiva.Resizable = DataGridViewTriState.True;
+            colActiva.SortMode = DataGridViewColumnSortMode.Automatic;
             colActiva.Width = 66;
             // 
             // frmProductos
@@ -293,10 +306,6 @@
         private ToolStripButton tsbEditar;
         private Panel panelNavegacion;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colProductos;
-        private DataGridViewTextBoxColumn colCategoria;
-        private DataGridViewTextBoxColumn colPrecio;
-        private DataGridViewTextBoxColumn colActiva;
         private Button btnUltimo;
         private Button btnSiguiente;
         private Button btnAnterior;
@@ -308,5 +317,10 @@
         private ToolStripButton tsbFiltrar;
         private ToolStripButton tsbActivar;
         private ToolStripButton tsbBuscar;
+        private DataGridViewTextBoxColumn colProductos;
+        private DataGridViewTextBoxColumn colCategoria;
+        private DataGridViewTextBoxColumn colPrecio;
+        private DataGridViewCheckBoxColumn colActiva;
+        private ToolStripButton tsbRefrescar;
     }
 }

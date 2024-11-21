@@ -98,11 +98,11 @@ namespace ProyectoSeminario.Datos.Repositorios
             return conn.QuerySingle<int>(selectQuery, categoria) > 0;
         }
 
-        public int GetCantidad(SqlConnection conn, Func<CategoriaListDto, bool>? filter = null, SqlTransaction? tran = null)
+        public int GetCantidad(SqlConnection conn, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null)
         {
             var selectQuery = @"SELECT c.CategoriaId, c.NombreCategoria, c.Activa
                           FROM Categorias c";
-            var query = conn.Query<CategoriaListDto>(selectQuery).ToList();
+            var query = conn.Query<Categoria>(selectQuery).ToList();
             if (filter != null)
             {
                 query = query.Where(filter).ToList();
@@ -123,13 +123,13 @@ namespace ProyectoSeminario.Datos.Repositorios
             return conn.QuerySingleOrDefault<Categoria>(query, new { CategoriaId = categoriaId }, tran);
         }
 
-        public List<CategoriaListDto> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<CategoriaListDto, bool>? filter = null, SqlTransaction? tran = null)
+        public List<Categoria> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null)
         {
             var selectQuery =
                  @"SELECT c.CategoriaId, c.NombreCategoria, c.Activa
                           FROM Categorias c";
 
-            var lista = conn.Query<CategoriaListDto>(
+            var lista = conn.Query<Categoria>(
                 selectQuery,
                 transaction: tran
             ).ToList();
@@ -166,12 +166,12 @@ namespace ProyectoSeminario.Datos.Repositorios
                 throw new Exception("Error en el repo", ex);
             }
         }
-        public List<CategoriaListDto> GetCategoriasActivasComboBox(SqlConnection conn)
+        public List<Categoria> GetCategoriasActivasComboBox(SqlConnection conn)
         {
             var selectQuery =
                  @"SELECT CategoriaId, NombreCategoria
          FROM Categorias WHERE Categorias.Activa = 1";
-            return conn.Query<CategoriaListDto>(selectQuery).ToList();
+            return conn.Query<Categoria>(selectQuery).ToList();
         }
     }
 }

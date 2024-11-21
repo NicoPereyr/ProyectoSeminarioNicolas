@@ -48,7 +48,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public int GetCantidad(Func<EmpleadoListDto, bool>? filter = null)
+        public int GetCantidad(Func<Empleado, bool>? filter = null)
         {
             using (var conn = new SqlConnection(_cadena))
             {
@@ -67,7 +67,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public List<EmpleadoListDto> GetLista(int currentPage, int pageSize, Func<EmpleadoListDto, bool>? filter = null)
+        public List<Empleado> GetLista(int currentPage, int pageSize, Func<Empleado, bool>? filter = null)
         {
             using (var conn = new SqlConnection(_cadena))
             {

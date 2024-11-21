@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProyectoSeminario.Entidades.Dtos;
+using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
 
 namespace ProyectoSeminario.Windows.Helpers
@@ -22,7 +23,7 @@ namespace ProyectoSeminario.Windows.Helpers
             _serviceProvider = serviceProvider;
             IServiciosCategorias? servicio = _serviceProvider?.GetService<IServiciosCategorias>();
             var listaCategorias = servicio?.GetCategoriasActivasComboBox();
-            var defaultCategoria = new CategoriaListDto()
+            var defaultCategoria = new Categoria()
             {
                 CategoriaId = 0,
                 NombreCategoria = "Seleccione"

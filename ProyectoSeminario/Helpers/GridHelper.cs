@@ -36,16 +36,26 @@ namespace ProyectoSeminario.Windows.Helpers
                     r.Cells[2].Value = producto.PrecioVenta.ToString();
                     r.Cells[3].Value = producto.Activo.ToString();
                     break;
-                case CategoriaListDto categoria:
+                case Categoria categoria:
                     r.Cells[0].Value = categoria.NombreCategoria;
                     r.Cells[1].Value = categoria.Activa.ToString();
                     break;
-                case EmpleadoListDto empleado:
+                case Empleado empleado:
                     r.Cells[0].Value = empleado.Nombre;
                     r.Cells[1].Value = empleado.Apellido;
-                    r.Cells[2].Value=empleado.Activo;
+                    r.Cells[5].Value = empleado.Activo.ToString();
                     r.Cells[3].Value = empleado.Documento.ToString();
                     r.Cells[4].Value = empleado.PorcentajeComision.ToString();
+                    if (empleado.Sexo == true)
+                    {
+                        r.Cells[2].Value = "Hombre";
+                    }
+                    else
+                    {
+                        r.Cells[2].Value = "Mujer";
+                    }
+                       
+                    
                     break;
 
             }

@@ -40,6 +40,8 @@
             label4 = new Label();
             txtPorcentajeComision = new TextBox();
             errorProvider1 = new ErrorProvider(components);
+            label5 = new Label();
+            txtSexo = new TextBox();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -135,12 +137,31 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 212);
+            label5.Name = "label5";
+            label5.Size = new Size(32, 15);
+            label5.TabIndex = 16;
+            label5.Text = "Sexo";
+            // 
+            // txtSexo
+            // 
+            txtSexo.Location = new Point(159, 204);
+            txtSexo.MaxLength = 3;
+            txtSexo.Name = "txtSexo";
+            txtSexo.Size = new Size(112, 23);
+            txtSexo.TabIndex = 17;
+            // 
             // frmEmpleadosAE
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(412, 388);
+            Controls.Add(label5);
             Controls.Add(label4);
+            Controls.Add(txtSexo);
             Controls.Add(txtPorcentajeComision);
             Controls.Add(txtApellido);
             Controls.Add(label3);
@@ -170,5 +191,7 @@
         private Label label4;
         private TextBox txtPorcentajeComision;
         private ErrorProvider errorProvider1;
+        private Label label5;
+        private TextBox txtSexo;
     }
 }

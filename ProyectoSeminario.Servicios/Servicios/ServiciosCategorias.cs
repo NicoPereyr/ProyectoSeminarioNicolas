@@ -45,7 +45,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public int GetCantidad(Func<CategoriaListDto, bool>? filter = null)
+        public int GetCantidad(Func<Categoria, bool>? filter = null)
         {
             using (var conn = new SqlConnection(_cadena))
             {
@@ -54,7 +54,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public List<CategoriaListDto> GetLista(int currentPage, int pageSize, Func<CategoriaListDto, bool>? filter = null)
+        public List<Categoria> GetLista(int currentPage, int pageSize, Func<Categoria, bool>? filter = null)
         {
             using (var conn = new SqlConnection(_cadena))
             {
@@ -136,7 +136,7 @@ namespace ProyectoSeminario.Servicios.Servicios
             }
         }
 
-        public List<CategoriaListDto> GetCategoriasActivasComboBox()
+        public List<Categoria> GetCategoriasActivasComboBox()
         {
             using (var conn = new SqlConnection(_cadena))
             {

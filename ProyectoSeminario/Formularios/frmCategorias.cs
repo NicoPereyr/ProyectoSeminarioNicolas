@@ -8,7 +8,7 @@ namespace ProyectoSeminario.Windows.Formularios
 {
     public partial class frmCategorias : Form
     {
-        private List<CategoriaListDto> lista = null!;
+        private List<Categoria> lista = null!;
         private readonly IServiciosCategorias? _servicio;
         private readonly IServiceProvider? _serviceProvider;
 
@@ -17,7 +17,7 @@ namespace ProyectoSeminario.Windows.Formularios
         private int pageSize = 10;//registros por página
         private int totalRecords = 0;//cantidad de registros
 
-        private Func<CategoriaListDto, bool>? filter = null;
+        private Func<Categoria, bool>? filter = null;
         public frmCategorias(IServiceProvider? serviceProvider)
         {
             InitializeComponent();
@@ -50,7 +50,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
         }
 
-        private void LoadData(Func<CategoriaListDto, bool>? filter = null)
+        private void LoadData(Func<Categoria, bool>? filter = null)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace ProyectoSeminario.Windows.Formularios
 
         }
 
-        private void MostrarDatosEnGrilla(List<CategoriaListDto> lista)
+        private void MostrarDatosEnGrilla(List<Categoria> lista)
         {
             GridHelper.LimpiarGrilla(dgvDatos);
             if (lista is not null)
@@ -198,7 +198,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 var r = dgvDatos.SelectedRows[0];
                 if (r.Tag != null)
                 {
-                    var categoriaDto = (CategoriaListDto)r.Tag;
+                    var categoriaDto = (Categoria)r.Tag;
 
                     // Crea el formulario para editar la categoría
                     frmCategoriasAE frm = new frmCategoriasAE(_serviceProvider) { Text = "Editar categoria" };
@@ -264,7 +264,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var categoria = (CategoriaListDto)r.Tag;
+            var categoria = (Categoria)r.Tag;
 
             try
             {
@@ -315,7 +315,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var categoria = (CategoriaListDto)r.Tag;
+            var categoria = (Categoria)r.Tag;
 
             try
             {

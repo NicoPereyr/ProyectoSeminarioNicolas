@@ -190,15 +190,15 @@ namespace ProyectoSeminario.Windows.Formularios
                 {
                     return;
                 }
-                filter = e => e.Nombre.ToUpper()
-                    .Contains(textoFiltro.ToUpper());
+                filter = (e => e.Nombre.ToUpper()
+
+                    .Contains(textoFiltro.ToUpper()) || (e.NombreCategoria.ToUpper().Contains(textoFiltro.ToUpper())));
                 totalRecords = _servicio!.GetCantidad(filter);
                 currentPage = 1;
                 if (totalRecords > 0)
                 {
                     totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
                     tsbBuscar.Enabled = false;
-                    tsbBuscar.BackColor = Color.FromArgb(41, 43, 39);
                     LoadData(filter);
                 }
                 else
@@ -220,8 +220,6 @@ namespace ProyectoSeminario.Windows.Formularios
             currentPage = 1;
             tsbBuscar.Enabled = true;
             tsbFiltrar.Enabled = true;
-            tsbBuscar.BackColor = Color.FromArgb(159, 188, 32);
-            tsbFiltrar.BackColor = Color.FromArgb(159, 188, 32);
             RecargarGrilla();
         }
 
@@ -371,5 +369,7 @@ namespace ProyectoSeminario.Windows.Formularios
                     MessageBoxIcon.Error);
             }
         }
+
+
     }
 }

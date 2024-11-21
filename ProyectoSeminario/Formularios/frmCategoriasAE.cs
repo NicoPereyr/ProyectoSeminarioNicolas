@@ -65,7 +65,7 @@ namespace ProyectoSeminario.Windows.Formularios
             return categoria;
         }
 
-        public void SetCategoriaDto(CategoriaListDto categoriaDto)
+        public void SetCategoriaDto(Categoria categoriaDto)
         {
             this.categoria = new Categoria
             {

@@ -15,9 +15,9 @@ namespace ProyectoSeminario.Datos.Interfaces
         bool Existe(Categoria categoria, SqlConnection conn, SqlTransaction? tran = null);
 
         void Editar(Categoria categoria, SqlConnection conn, SqlTransaction? tran = null);
-        List<CategoriaListDto> GetLista(SqlConnection conn, int currentPage,
-            int pageSize, Func<CategoriaListDto, bool>? filter = null, SqlTransaction? tran = null);
-        int GetCantidad(SqlConnection conn, Func<CategoriaListDto, bool>? filter = null, SqlTransaction? tran = null);
+        List<Categoria> GetLista(SqlConnection conn, int currentPage,
+            int pageSize, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null);
+        int GetCantidad(SqlConnection conn, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null);
         int GetCategoriaIdIfExists(Categoria categoria, SqlConnection conn,
             SqlTransaction? tran = null);
         Categoria? GetCategoriaPorId(int categoriaId, SqlConnection conn,
@@ -26,6 +26,6 @@ namespace ProyectoSeminario.Datos.Interfaces
             SqlConnection conn, SqlTransaction? tran = null);
 
         bool EstaRelacionada(int categoriaId, SqlConnection conn);
-        public List<CategoriaListDto> GetCategoriasActivasComboBox(SqlConnection conn);
+        public List<Categoria> GetCategoriasActivasComboBox(SqlConnection conn);
     }
 }

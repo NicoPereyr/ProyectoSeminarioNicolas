@@ -86,25 +86,23 @@ namespace ProyectoSeminario.Windows.Formularios
                 if (cboCategorias.SelectedValue is not null)
                 {
                     producto.CategoriaId = (int)cboCategorias.SelectedValue;
-                    producto.Categoria = (Categoria)cboCategorias.SelectedItem!;
+
+                    var CategoriaSeleccionada = (Categoria)cboCategorias.SelectedItem!;
+                    
                     producto.Categoria = categoriaSeleccionada;
                     producto.Activo = true;
                 }
 
-                //Veo si el producto tiene alguna imagen asociada
-                if (producto.Imagen != string.Empty || producto.Imagen is not null)
+                producto.Imagen = archivoImagen;
+                if (!string.IsNullOrWhiteSpace(producto.Imagen))
                 {
-                    //Me aseguro que esa imagen exista
                     if (!File.Exists($"{carpetaImagen}{producto.Imagen}"))
                     {
-                        //Si no existe, muestro la imagen de archivo no encontrado
                         picImagen.Image = Image.FromFile(archivoNoEncontrado);
                     }
                     else
                     {
-                        //Caso contrario muestro la imagen
                         picImagen.Image = Image.FromFile($"{carpetaImagen}{producto.Imagen}");
-                        archivoImagen = producto.Imagen;
                     }
                 }
                 else
@@ -112,7 +110,6 @@ namespace ProyectoSeminario.Windows.Formularios
                     //Si no tiene imagen muestro Sin Imagen 
                     picImagen.Image = Image.FromFile(imagenNoDisponible);
                 }
-
                 DialogResult = DialogResult.OK;
             }
         }
@@ -169,11 +166,7 @@ namespace ProyectoSeminario.Windows.Formularios
         {
             //Seteo del openFileDialog
             openFileDialog1.Multiselect = false;
-            openFileDialog1.InitialDirectory = Environment.CurrentDirectory + @"\Imágenes\";
-            openFileDialog1.Filter = @"Archivos jpg (*.jpg) | *.jpg | 
-            Archivos png (*.png)  | *.png | 
-            Archivos jfif (*.jfif) | *.jfif | 
-            Todos (.) | .";
+            openFileDialog1.InitialDirectory = Environment.CurrentDirectory + @"Todos los archivos (.)|.|Archivos PNG (.png)|.png|Archivos JFIF (.jfif)|.jfif|Archivos JPG (.jpg)|.jpg";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
             DialogResult dr = openFileDialog1.ShowDialog(this);//muestro el openFileDialog
@@ -185,13 +178,10 @@ namespace ProyectoSeminario.Windows.Formularios
                 {
                     return;//sino me voy
                 }
-                //Tomo el nombre del archivo de imagen con su ruta
-                //archivoNombreConRuta = openFileDialog1.FileName;
                 picImagen.Image = Image.FromFile(openFileDialog1.FileName);
-                archivoImagen = openFileDialog1.FileName;//Tomo la ruta y el nombre del archivo
+                archivoImagen = openFileDialog1.SafeFileName;//Tomo la ruta y el nombre del archivo
             }
         }
-
 
     }
 }

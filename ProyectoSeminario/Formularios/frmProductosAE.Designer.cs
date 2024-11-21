@@ -158,6 +158,7 @@
             picImagen.Location = new Point(0, 14);
             picImagen.Name = "picImagen";
             picImagen.Size = new Size(143, 83);
+            picImagen.SizeMode = PictureBoxSizeMode.StretchImage;
             picImagen.TabIndex = 0;
             picImagen.TabStop = false;
             // 

@@ -8,7 +8,7 @@ namespace ProyectoSeminario.Windows.Formularios
 {
     public partial class frmEmpleados : Form
     {
-        private List<EmpleadoListDto> lista = null!;
+        private List<Empleado> lista = null!;
         private readonly IServiciosEmpleados? _servicio;
         private readonly IServiceProvider? _serviceProvider;
 
@@ -17,7 +17,7 @@ namespace ProyectoSeminario.Windows.Formularios
         private int pageSize = 10;//registros por página
         private int totalRecords = 0;//cantidad de registros
 
-        private Func<EmpleadoListDto, bool>? filter = null;
+        private Func<Empleado, bool>? filter = null;
         public frmEmpleados(IServiceProvider? serviceProvider)
         {
             InitializeComponent();
@@ -50,11 +50,11 @@ namespace ProyectoSeminario.Windows.Formularios
             }
         }
 
-        private void LoadData(Func<EmpleadoListDto, bool>? filter = null)
+        private void LoadData(Func<Empleado, bool>? filter = null)
         {
             try
             {
-                lista = _servicio!.GetLista(currentPage, pageSize);
+                lista = _servicio!.GetLista(currentPage, pageSize, filter);
                 if (lista.Count > 0)
                 {
                     MostrarDatosEnGrilla(lista);
@@ -88,7 +88,7 @@ namespace ProyectoSeminario.Windows.Formularios
 
         }
 
-        private void MostrarDatosEnGrilla(List<EmpleadoListDto> lista)
+        private void MostrarDatosEnGrilla(List<Empleado> lista)
         {
             GridHelper.LimpiarGrilla(dgvDatos);
             if (lista is not null)
@@ -184,10 +184,42 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private void tsbFiltrar_Click(object sender, EventArgs e)
         {
+            frmFiltroTexto frm = new frmFiltroTexto() { Text = "Ingresar texto para buscar por empleado" };
+            DialogResult dr = frm.ShowDialog(this);
+            try
+            {
+                var textoFiltro = frm.GetTexto();
+                if (textoFiltro is null || textoFiltro == string.Empty)
+                {
+                    return;
+                }
+                filter = (e => e.Nombre.ToUpper()
 
+                    .Contains(textoFiltro.ToUpper()) || (e.Apellido.ToUpper().Contains(textoFiltro.ToUpper())));
+                totalRecords = _servicio!.GetCantidad(filter);
+                currentPage = 1;
+                if (totalRecords > 0)
+                {
+                    totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+                    tsbFiltrar.Enabled = false;
+                    LoadData(filter);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron registros!!!", "Mensaje",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    filter = null;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        private void tsbEditar_Click(object sender, EventArgs e)
+    
+
+    private void tsbEditar_Click(object sender, EventArgs e)
         {//Consultar a Carlos
             if (dgvDatos.SelectedRows.Count == 0)
             {
@@ -198,7 +230,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 var r = dgvDatos.SelectedRows[0];
                 if (r.Tag != null)
                 {
-                    var empleadoDto = (EmpleadoListDto)r.Tag;
+                    var empleadoDto = (Empleado)r.Tag;
 
                     // Crea el formulario para editar la categoría
                     frmEmpleadosAE frm = new frmEmpleadosAE(_serviceProvider) { Text = "Editar empleado" };
@@ -218,14 +250,12 @@ namespace ProyectoSeminario.Windows.Formularios
                         throw new Exception("Error al recuperar el empleado editado.");
                     }
 
-                    // Mapear los cambios de la entidad 'Categoria' al DTO 'CategoriaListDto'
                     empleadoDto.Nombre = empleadoEditado.Nombre;
-                    empleadoDto.Apellido= empleadoEditado.Apellido;
+                    empleadoDto.Apellido = empleadoEditado.Apellido;
                     empleadoDto.Documento = empleadoEditado.Documento;
-                    empleadoDto.PorcentajeComision=empleadoEditado.PorcentajeComision;
+                    empleadoDto.PorcentajeComision = empleadoEditado.PorcentajeComision;
                     // Aquí puedes mapear cualquier otro campo que necesites mostrar en la grilla
 
-                    // Verifica si la categoría ya existe (probablemente por el nombre o algún otro criterio)
                     if (!_servicio!.Existe(empleadoEditado))
                     {
                         // Si no existe, guarda los cambios en la base de datos
@@ -267,7 +297,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var empleado = (EmpleadoListDto)r.Tag;
+            var empleado = (Empleado)r.Tag;
             try
             {
                 DialogResult dr = MessageBox.Show($@"¿Desea desactivar el empleado {empleado.Nombre}?",
@@ -310,7 +340,7 @@ namespace ProyectoSeminario.Windows.Formularios
             }
             var r = dgvDatos.SelectedRows[0];
             if (r.Tag is null) return;
-            var empleado = (EmpleadoListDto)r.Tag;
+            var empleado = (Empleado)r.Tag;
 
             try
             {
@@ -345,5 +375,14 @@ namespace ProyectoSeminario.Windows.Formularios
             }
         }
 
+        private void tsbRefrescar_Click(object sender, EventArgs e)
+        {
+            filter = null;
+            currentPage = 1;
+            tsbFiltrar.Enabled = true;
+            tsbFiltrar.Enabled = true;
+            RecargarGrilla();
+
+        }
     }
 }
