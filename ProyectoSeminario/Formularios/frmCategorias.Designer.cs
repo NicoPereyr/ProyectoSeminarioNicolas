@@ -46,6 +46,8 @@
             dgvDatos = new DataGridView();
             colCategorias = new DataGridViewTextBoxColumn();
             colActiva = new DataGridViewCheckBoxColumn();
+            tsbBuscar = new ToolStripButton();
+            tsbRefrescar = new ToolStripButton();
             topTS.SuspendLayout();
             panelNavegacion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
@@ -55,7 +57,7 @@
             // 
             topTS.BackColor = Color.PaleTurquoise;
             topTS.ImageScalingSize = new Size(32, 32);
-            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbDesactivar, tsbActivar, tsbEditar, tsbFiltrar });
+            topTS.Items.AddRange(new ToolStripItem[] { tsbAgregar, tsbDesactivar, tsbActivar, tsbEditar, tsbFiltrar, tsbBuscar, tsbRefrescar });
             topTS.Location = new Point(0, 0);
             topTS.Name = "topTS";
             topTS.Size = new Size(800, 39);
@@ -237,6 +239,26 @@
             colActiva.Resizable = DataGridViewTriState.True;
             colActiva.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
+            // tsbBuscar
+            // 
+            tsbBuscar.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbBuscar.Image = Properties.Resources.icons8_search_96px;
+            tsbBuscar.ImageTransparentColor = Color.Magenta;
+            tsbBuscar.Name = "tsbBuscar";
+            tsbBuscar.Size = new Size(36, 36);
+            tsbBuscar.Text = "Buscar";
+            tsbBuscar.Click += tsbBuscar_Click;
+            // 
+            // tsbRefrescar
+            // 
+            tsbRefrescar.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbRefrescar.Image = Properties.Resources.icons8_synchronize_96px;
+            tsbRefrescar.ImageTransparentColor = Color.Magenta;
+            tsbRefrescar.Name = "tsbRefrescar";
+            tsbRefrescar.Size = new Size(36, 36);
+            tsbRefrescar.Text = "Refrescar";
+            tsbRefrescar.Click += tsbRefrescar_Click;
+            // 
             // frmCategorias
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -277,5 +299,7 @@
         private ToolStripButton tsbActivar;
         private DataGridViewTextBoxColumn colCategorias;
         private DataGridViewCheckBoxColumn colActiva;
+        private ToolStripButton tsbBuscar;
+        private ToolStripButton tsbRefrescar;
     }
 }

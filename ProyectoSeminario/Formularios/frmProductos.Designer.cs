@@ -133,7 +133,7 @@
             tsbRefrescar.ImageTransparentColor = Color.Magenta;
             tsbRefrescar.Name = "tsbRefrescar";
             tsbRefrescar.Size = new Size(36, 36);
-            tsbRefrescar.Text = "toolStripButton1";
+            tsbRefrescar.Text = "Refrescar";
             tsbRefrescar.Click += tsbRefrescar_Click;
             // 
             // panelNavegacion

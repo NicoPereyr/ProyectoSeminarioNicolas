@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
 using ProyectoSeminario.Windows.Helpers;
@@ -349,5 +348,52 @@ namespace ProyectoSeminario.Windows.Formularios
 
             }
         }
+
+        private void tsbBuscar_Click(object sender, EventArgs e)
+        {
+            {
+                frmFiltroTexto frm = new frmFiltroTexto() { Text = "Ingresar texto para buscar por producto" };
+                DialogResult dr = frm.ShowDialog(this);
+                try
+                {
+                    var textoFiltro = frm.GetTexto();
+                    if (textoFiltro is null || textoFiltro == string.Empty)
+                    {
+                        return;
+                    }
+                    filter = (e => e.NombreCategoria.ToUpper()
+
+                        .Contains(textoFiltro.ToUpper()) || (e.NombreCategoria.ToUpper().Contains(textoFiltro.ToUpper())));
+                    totalRecords = _servicio!.GetCantidad(filter);
+                    currentPage = 1;
+                    if (totalRecords > 0)
+                    {
+                        totalPages = (int)Math.Ceiling((decimal)totalRecords / pageSize);
+                        tsbBuscar.Enabled = false;
+                        LoadData(filter);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se encontraron registros!!!", "Mensaje",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        filter = null;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+
+        private void tsbRefrescar_Click(object sender, EventArgs e)
+        {
+            filter = null;
+            currentPage = 1;
+            tsbBuscar.Enabled = true;
+            tsbFiltrar.Enabled = true;
+            RecargarGrilla();
+        }
     }
 }
+
