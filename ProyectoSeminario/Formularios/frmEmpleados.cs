@@ -220,7 +220,7 @@ namespace ProyectoSeminario.Windows.Formularios
     
 
     private void tsbEditar_Click(object sender, EventArgs e)
-        {//Consultar a Carlos
+        {
             if (dgvDatos.SelectedRows.Count == 0)
             {
                 return;
@@ -254,6 +254,7 @@ namespace ProyectoSeminario.Windows.Formularios
                     empleadoDto.Apellido = empleadoEditado.Apellido;
                     empleadoDto.Documento = empleadoEditado.Documento;
                     empleadoDto.PorcentajeComision = empleadoEditado.PorcentajeComision;
+                    empleadoDto.Sexo = empleadoEditado.Sexo;
                     // Aquí puedes mapear cualquier otro campo que necesites mostrar en la grilla
 
                     if (!_servicio!.Existe(empleadoEditado))
@@ -264,7 +265,7 @@ namespace ProyectoSeminario.Windows.Formularios
                         // Actualiza la fila del DataGridView con el DTO actualizado
                         GridHelper.SetearFila(r, empleadoDto); // Usa el DTO para mostrar en la grilla
 
-                        MessageBox.Show("Empleado editada",
+                        MessageBox.Show("Empleado editado",
                             "Mensaje",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);

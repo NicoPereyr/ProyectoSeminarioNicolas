@@ -41,6 +41,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 empleado.Documento = int.Parse(txtDocumento.Text);
                 empleado.PorcentajeComision = int.Parse(txtPorcentajeComision.Text);
                 empleado.Activo = true;
+                empleado.Sexo = true;
                 DialogResult = DialogResult.OK;
             }
         }
@@ -49,14 +50,14 @@ namespace ProyectoSeminario.Windows.Formularios
         {
             bool valido = true;
             errorProvider1.Clear();
-            if (string.IsNullOrEmpty(txtNombre.Text)
-                || !System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
+            if (string.IsNullOrEmpty(txtNombre.Text))
+                //|| !System.Text.RegularExpressions.Regex.IsMatch(txtNombre.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
             {
                 valido = false;
                 errorProvider1.SetError(txtNombre, "Nombre del empleado es requerido");
             }
-            if (string.IsNullOrEmpty(txtApellido.Text)
-                || !System.Text.RegularExpressions.Regex.IsMatch(txtApellido.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
+            if (string.IsNullOrEmpty(txtApellido.Text))
+                //|| !System.Text.RegularExpressions.Regex.IsMatch(txtApellido.Text, @"^[a-zA-Z]+(?:\s[a-zA-Z]+$^"))
             {
                 valido = false;
                 errorProvider1.SetError(txtApellido, "Apellido del empleado es requerido");
@@ -97,7 +98,8 @@ namespace ProyectoSeminario.Windows.Formularios
                 Apellido = empleadoDto.Apellido,
                 Documento = empleadoDto.Documento,
                 PorcentajeComision = empleadoDto.PorcentajeComision,
-                Activo = true // O toma el valor correspondiente si lo tienes en el DTO
+                Sexo=empleadoDto.Sexo,
+                Activo = true 
             };
         }
 
@@ -111,6 +113,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 txtApellido.Text = empleado.Apellido;
                 txtDocumento.Text = empleado.Documento.ToString();
                 txtPorcentajeComision.Text = empleado.PorcentajeComision.ToString();
+                txtSexo.Text=empleado.Sexo.ToString();
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
 using System.Data.SqlClient;
@@ -90,11 +89,11 @@ namespace ProyectoSeminario.Servicios.Servicios
                             _repositorioEmpleados!.Agregar(empleado, conn, tran);
                         }
 
-                        tran.Commit();//guarda efectivamente
+                        tran.Commit();
                     }
                     catch (Exception)
                     {
-                        tran.Rollback();//tira todo pa tras!!!
+                        tran.Rollback();
                         throw;
                     }
                 }

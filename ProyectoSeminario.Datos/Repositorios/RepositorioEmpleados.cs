@@ -9,7 +9,7 @@ namespace ProyectoSeminario.Datos.Repositorios
     {
         public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
         {
-            var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision) VALUES 
+            var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision, Sexo) VALUES 
                         (@Nombre, @Apellido, @Activo, @Documento, @PorcentajeComision, @Sexo); 
                         SELECT CAST(SCOPE_IDENTITY() as int)";
 

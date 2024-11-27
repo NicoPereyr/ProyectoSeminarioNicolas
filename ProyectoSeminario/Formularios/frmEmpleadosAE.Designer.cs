@@ -149,7 +149,7 @@
             // txtSexo
             // 
             txtSexo.Location = new Point(159, 204);
-            txtSexo.MaxLength = 3;
+            txtSexo.MaxLength = 6;
             txtSexo.Name = "txtSexo";
             txtSexo.Size = new Size(112, 23);
             txtSexo.TabIndex = 17;
