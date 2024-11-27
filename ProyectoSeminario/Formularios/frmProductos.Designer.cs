@@ -195,8 +195,10 @@
             // 
             // txtCantidadPaginas
             // 
+            txtCantidadPaginas.Enabled = false;
             txtCantidadPaginas.Location = new Point(184, 35);
             txtCantidadPaginas.Name = "txtCantidadPaginas";
+            txtCantidadPaginas.ReadOnly = true;
             txtCantidadPaginas.Size = new Size(62, 23);
             txtCantidadPaginas.TabIndex = 3;
             // 
@@ -220,6 +222,7 @@
             // 
             // cboPaginas
             // 
+            cboPaginas.DropDownStyle = ComboBoxStyle.DropDownList;
             cboPaginas.FormattingEnabled = true;
             cboPaginas.Location = new Point(82, 35);
             cboPaginas.Name = "cboPaginas";
@@ -230,6 +233,7 @@
             // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
+            dgvDatos.AllowUserToResizeRows = false;
             dgvDatos.Anchor = AnchorStyles.Left;
             dgvDatos.BackgroundColor = Color.PaleTurquoise;
             dgvDatos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -250,6 +254,8 @@
             colProductos.HeaderText = "Producto";
             colProductos.Name = "colProductos";
             colProductos.ReadOnly = true;
+            colProductos.Resizable = DataGridViewTriState.False;
+            colProductos.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // colCategoria
             // 
@@ -257,6 +263,8 @@
             colCategoria.HeaderText = "Categoria";
             colCategoria.Name = "colCategoria";
             colCategoria.ReadOnly = true;
+            colCategoria.Resizable = DataGridViewTriState.False;
+            colCategoria.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // colPrecio
             // 
@@ -264,7 +272,9 @@
             colPrecio.HeaderText = "Precio";
             colPrecio.Name = "colPrecio";
             colPrecio.ReadOnly = true;
-            colPrecio.Width = 65;
+            colPrecio.Resizable = DataGridViewTriState.False;
+            colPrecio.SortMode = DataGridViewColumnSortMode.NotSortable;
+            colPrecio.Width = 46;
             // 
             // colActiva
             // 
@@ -273,9 +283,8 @@
             colActiva.HeaderText = "Activo";
             colActiva.Name = "colActiva";
             colActiva.ReadOnly = true;
-            colActiva.Resizable = DataGridViewTriState.True;
-            colActiva.SortMode = DataGridViewColumnSortMode.Automatic;
-            colActiva.Width = 66;
+            colActiva.Resizable = DataGridViewTriState.False;
+            colActiva.Width = 47;
             // 
             // frmProductos
             // 
@@ -317,10 +326,10 @@
         private ToolStripButton tsbFiltrar;
         private ToolStripButton tsbActivar;
         private ToolStripButton tsbBuscar;
+        private ToolStripButton tsbRefrescar;
         private DataGridViewTextBoxColumn colProductos;
         private DataGridViewTextBoxColumn colCategoria;
         private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewCheckBoxColumn colActiva;
-        private ToolStripButton tsbRefrescar;
     }
 }

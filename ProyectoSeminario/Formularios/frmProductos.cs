@@ -311,7 +311,6 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private void tsbEditar_Click(object sender, EventArgs e)
         {
-            //Conteo de fila seleccionada
             if (dgvDatos.SelectedRows.Count == 0)
             {
                 return;
