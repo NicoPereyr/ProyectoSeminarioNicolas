@@ -4,6 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using ProyectoSeminario.Servicios.Interfaces;
 using ProyectoSeminario.Servicios.Servicios;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using ProyectoSeminario.Datos.DbContext;
+
 
 namespace ProyectoSeminario.IoC
 {
@@ -12,8 +16,19 @@ namespace ProyectoSeminario.IoC
         public static IServiceProvider ConfigurarServicios()
         {
             var service = new ServiceCollection();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
 
-            var cadena = ConfigurationManager
+            var connectionString = configuration
+                .GetConnectionString("ProyectoSeminarioConnection");
+
+            service.AddDbContext<ProyectoSeminarioDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+
+            var cadena = System.Configuration.ConfigurationManager
                 .ConnectionStrings["MiConexion"].ToString();
 
             service.AddScoped<IRepositorioProductos, RepositorioProductos>();
