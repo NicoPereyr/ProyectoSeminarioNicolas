@@ -35,19 +35,10 @@ namespace ProyectoSeminario.IoC
             service.AddScoped<IRepositorioCategorias, RepositorioCategorias>();
             service.AddScoped<IRepositorioEmpleados, RepositorioEmpleados>();
 
-            service.AddScoped<IServiciosProductos>(sp =>
-            {
-                var repositorio = new RepositorioProductos();
-                var repositorioCategorias = new RepositorioCategorias();
-                return new ServiciosProductos(repositorio, cadena);
-            });
 
-            service.AddScoped<IServiciosCategorias>(sp =>
-            {
-                var repositorio = new RepositorioCategorias();
-                var repositorioCategorias = new RepositorioCategorias();
-                return new ServiciosCategorias(repositorio, cadena);
-            });
+            service.AddScoped<IServiciosProductos, ServiciosProductos>();
+
+            service.AddScoped<IServiciosCategorias, ServiciosCategorias>();
 
             service.AddScoped<IServiciosEmpleados>(sp =>
             {

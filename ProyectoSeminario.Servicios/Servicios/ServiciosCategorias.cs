@@ -1,148 +1,79 @@
-﻿using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Entidades.Dtos;
+﻿
+using ProyectoSeminario.Datos.Interfaces;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Servicios.Servicios
 {
     public class ServiciosCategorias : IServiciosCategorias
     {
-        private readonly IRepositorioCategorias? _repositorioCategorias;
-        private readonly string? _cadena;
-        public ServiciosCategorias(IRepositorioCategorias? repositorio, string? cadena)
+        private readonly IRepositorioCategorias _repositorioCategorias;
+
+        public ServiciosCategorias(IRepositorioCategorias repositorio)
         {
-            _repositorioCategorias = repositorio ?? throw new ApplicationException("Dependencias no cargadas!!!");
-            _cadena = cadena;
+            _repositorioCategorias = repositorio
+                ?? throw new ArgumentNullException(nameof(repositorio));
         }
 
         public void Desactivar(int categoriaId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                        _repositorioCategorias!.Desactivar(categoriaId, conn);
-                    
-            }
+            _repositorioCategorias.Desactivar(categoriaId);
         }
 
         public void Activar(int categoriaId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                _repositorioCategorias!.Activar(categoriaId, conn);
-
-            }
+            _repositorioCategorias.Activar(categoriaId);
         }
 
         public bool Existe(Categoria categoria)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioCategorias!.Existe(categoria, conn);
-            }
+            return _repositorioCategorias.Existe(categoria);
         }
 
         public int GetCantidad(Func<Categoria, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioCategorias!.GetCantidad(conn, filter);
-            }
+            return _repositorioCategorias.GetCantidad(filter);
         }
 
-        public List<Categoria> GetLista(int currentPage, int pageSize, Func<Categoria, bool>? filter = null)
+        public List<Categoria> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<Categoria, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioCategorias.GetLista(conn, currentPage, pageSize, filter);
-            }
+            return _repositorioCategorias.GetLista(
+                currentPage, pageSize, filter);
         }
 
         public Categoria? GetCategoriaPorId(int categoriaId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                var categoria = _repositorioCategorias.GetCategoriaPorId(categoriaId, conn);
-                return categoria;
-            }
+            return _repositorioCategorias.GetCategoriaPorId(categoriaId);
         }
 
         public void Guardar(Categoria categoria)
         {
-            using (var conn = new SqlConnection(_cadena))
+            if (categoria.CategoriaId == 0)
             {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (categoria.CategoriaId == 0)
-                        {
-                            _repositorioCategorias!.Agregar(categoria, conn, tran);
-                        }
-
-                        tran.Commit();//guarda efectivamente
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();//tira todo pa tras!!!
-                        throw;
-                    }
-                }
+                _repositorioCategorias.Agregar(categoria);
             }
+            else
+            {
+                _repositorioCategorias.Editar(categoria);
+            }
+        }
+
+        public void Editar(Categoria categoriaEditada)
+        {
+            _repositorioCategorias.Editar(categoriaEditada);
         }
 
         public bool EstaRelacionada(int categoriaId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioCategorias!.EstaRelacionada(categoriaId, conn);
-
-            }
-
-        }
-        public void Editar(Categoria categoriaEditada)
-        {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (categoriaEditada.CategoriaId == 0)
-                        {
-                            _repositorioCategorias!.Agregar(categoriaEditada, conn, tran);
-                        }
-                        else
-                        {
-                            _repositorioCategorias!.Editar(categoriaEditada, conn, tran);
-                        }
-                        tran.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
-            }
+            return _repositorioCategorias.EstaRelacionada(categoriaId);
         }
 
         public List<Categoria> GetCategoriasActivasComboBox()
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioCategorias.GetCategoriasActivasComboBox(conn);
-            }
+            return _repositorioCategorias.GetCategoriasActivasComboBox();
         }
     }
 }

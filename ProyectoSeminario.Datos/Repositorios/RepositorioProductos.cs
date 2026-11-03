@@ -1,156 +1,142 @@
-﻿using Dapper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using ProyectoSeminario.Datos.DbContext;
 using ProyectoSeminario.Datos.Interfaces;
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Datos.Repositorios
 {
     public class RepositorioProductos : IRepositorioProductos
     {
-        public void Agregar(Producto producto, SqlConnection conn, SqlTransaction? tran = null)
+        private readonly ProyectoSeminarioDbContext _context;
+
+        public RepositorioProductos(ProyectoSeminarioDbContext context)
         {
-            int primaryKey = -1;
-            string insertQuery = @"INSERT INTO Productos (Nombre, Descripcion, PrecioVenta, Activo, Imagen, CategoriaId) 
-        VALUES(@Nombre, @Descripcion, @PrecioVenta, @Activo, @Imagen, @CategoriaId); SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            primaryKey = conn.QuerySingle<int>(insertQuery, producto, tran);
-            if (primaryKey > 0)
-            {
-                producto.ProductoId = primaryKey;
-                return;
-            }
-
-            throw new Exception("No se pudo agregar el producto");
+            _context = context;
         }
 
-        public void Desactivar(int productoId, SqlConnection conn, SqlTransaction? tran = null)
+        public void Agregar(Producto producto)
         {
-            try
-            {
-                var updateQuery = @"UPDATE Productos SET 
-                Activo = 0 WHERE productoId = @productoId";
-
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @productoId = productoId,
-                });
-
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo desactivar");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo desactivar", ex);
-            }
+            _context.Productos.Add(producto);
+            _context.SaveChanges();
         }
 
-        public void Activar(int productoId, SqlConnection conn, SqlTransaction? tran = null)
+        public void Editar(Producto producto)
         {
-            try
-            {
-                var updateQuery = @"UPDATE Productos SET 
-                Activo = 1 WHERE productoId = @productoId";
+            var productoDb = _context.Productos
+                .Find(producto.ProductoId);
 
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @productoId = productoId,
-                });
-
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo activar");
-                }
-            }
-            catch (Exception ex)
+            if (productoDb == null)
             {
-                throw new Exception("No se pudo activar", ex);
+                throw new Exception("No se encontró el producto");
             }
+
+            productoDb.Nombre = producto.Nombre;
+            productoDb.Descripcion = producto.Descripcion;
+            productoDb.PrecioVenta = producto.PrecioVenta;
+            productoDb.Imagen = producto.Imagen;
+            productoDb.CategoriaId = producto.CategoriaId;
+
+            _context.SaveChanges();
         }
 
-        public void Editar(Producto productoEditado, SqlConnection conn, SqlTransaction? tran = null)
+        public void Activar(int productoId)
         {
-            string updateQuery = @"UPDATE Productos SET 
-                            Nombre=@Nombre, 
-                            Descripcion=@Descripcion,
-                            PrecioVenta=@PrecioVenta,
-                            Imagen=@Imagen,
-                            CategoriaId=@CategoriaId
-                            WHERE ProductoId=@ProductoId";
-
-            int registrosAfectados = conn.Execute(updateQuery, productoEditado, tran);
-            if (registrosAfectados == 0)
-            {
-                throw new Exception("No se pudo editar el producto");
-            }
-        }
-
-        public bool Existe(Producto producto, SqlConnection conn, SqlTransaction? tran = null)
-        {
-            var selectQuery = "SELECT COUNT(*) FROM Productos WHERE Nombre = @Nombre";
-            if (producto.ProductoId != 0)
-            {
-                selectQuery += " AND ProductoId<>@ProductoId";
-            }
-
-            return conn.QuerySingle<int>(selectQuery, producto) > 0;
-        }
-
-        public int GetCantidad(SqlConnection conn, Func<ProductoListDto, bool>? filter = null, SqlTransaction? tran = null)
-        {
-            var selectQuery = @"SELECT p.ProductoId, p.Nombre, c.NombreCategoria, p.PrecioVenta, p.Activo
-                  FROM Productos p
-                  LEFT JOIN Categorias c ON p.CategoriaId = c.CategoriaId";
-            var query = conn.Query<ProductoListDto>(selectQuery).ToList();
-            if (filter != null)
-            {
-                query = query.Where(filter).ToList();
-            }
-            return query.Count;
-        }
-
-        public Producto? GetProductoPorId(int productoId, SqlConnection conn)
-        {
-            string selectQuery = @"SELECT ProductoId, Nombre, Descripcion, PrecioVenta, Activo, Imagen, CategoriaId
-        FROM Productos
-        WHERE ProductoId=@ProductoId";
-            var producto = conn.QuerySingleOrDefault<Producto>(selectQuery, new { @ProductoId = productoId });
+            var producto = _context.Productos.Find(productoId);
 
             if (producto == null)
             {
-                return null;
+                throw new Exception("No se encontró el producto");
             }
-            return producto;
+
+            producto.Activo = true;
+            _context.SaveChanges();
         }
 
-        public List<ProductoListDto> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<ProductoListDto, bool>? filter = null, SqlTransaction? tran = null)
+        public void Desactivar(int productoId)
         {
-            var selectQuery =
-                 @"SELECT p.ProductoId, p.Nombre, p.Descripcion, p.PrecioVenta, p.Activo, p.Imagen, p.CategoriaId, c.NombreCategoria
-  FROM Productos p
-  LEFT JOIN Categorias c ON p.CategoriaId = c.CategoriaId";
+            var producto = _context.Productos.Find(productoId);
 
-            var lista = conn.Query<ProductoListDto, Categoria, ProductoListDto>(
-                selectQuery,
-                (producto, categoria) =>
-                {
-                    // Concatenacion de los campos relacionados
-                    producto.CategoriaId = categoria.CategoriaId;
-                    producto.NombreCategoria = $"{categoria.NombreCategoria}";
-                    return producto;
-                },
-                splitOn: "CategoriaId",  // Punto de split
-                transaction: tran
-            ).ToList();
+            if (producto == null)
+            {
+                throw new Exception("No se encontró el producto");
+            }
+
+            producto.Activo = false;
+            _context.SaveChanges();
+        }
+
+        public bool Existe(Producto producto)
+        {
+            return _context.Productos.Any(p =>
+                p.Nombre == producto.Nombre &&
+                p.ProductoId != producto.ProductoId);
+        }
+
+        public Producto? GetProductoPorId(int productoId)
+        {
+            return _context.Productos
+                .AsNoTracking()
+                .FirstOrDefault(p => p.ProductoId == productoId);
+        }
+
+        public int GetCantidad(
+            Func<ProductoListDto, bool>? filter = null)
+        {
+            var lista = ObtenerProductosDto();
 
             if (filter != null)
             {
-                lista = lista.Where(filter).ToList();
+                lista = lista.Where(filter);
             }
 
-            return lista.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            return lista.Count();
+        }
+
+        public List<ProductoListDto> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<ProductoListDto, bool>? filter = null)
+        {
+            if (currentPage < 1 || pageSize < 1)
+            {
+                throw new ArgumentException(
+                    "La página y su tamaño deben ser mayores a cero");
+            }
+
+            var lista = ObtenerProductosDto();
+
+            if (filter != null)
+            {
+                lista = lista.Where(filter);
+            }
+
+            return lista
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
+        private IEnumerable<ProductoListDto> ObtenerProductosDto()
+        {
+            return _context.Productos
+                .AsNoTracking()
+                .OrderBy(p => p.ProductoId)
+                .Select(p => new ProductoListDto
+                {
+                    ProductoId = p.ProductoId,
+                    Nombre = p.Nombre,
+                    Descripcion = p.Descripcion,
+                    PrecioVenta = p.PrecioVenta,
+                    Activo = p.Activo,
+                    Imagen = p.Imagen,
+                    CategoriaId = p.CategoriaId,
+                    NombreCategoria = p.Categoria != null
+                        ? p.Categoria.NombreCategoria
+                        : string.Empty
+                })
+                .AsEnumerable();
         }
     }
 }

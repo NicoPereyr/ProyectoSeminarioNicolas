@@ -1,133 +1,77 @@
-﻿using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Datos.Repositorios;
+﻿
+using ProyectoSeminario.Datos.Interfaces;
 using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Servicios.Servicios
 {
     public class ServiciosProductos : IServiciosProductos
     {
-        private readonly IRepositorioProductos? _repositorioProductos;
-        private readonly string? _cadena;
-        public ServiciosProductos(IRepositorioProductos? repositorio, string? cadena)
+        private readonly IRepositorioProductos _repositorioProductos;
+
+        public ServiciosProductos(IRepositorioProductos repositorio)
         {
-            _repositorioProductos = repositorio ?? throw new ApplicationException("Dependencias no cargadas!!!");
-            _cadena = cadena;
+            _repositorioProductos = repositorio
+                ?? throw new ArgumentNullException(nameof(repositorio));
         }
 
         public void Desactivar(int productoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                _repositorioProductos!.Desactivar(productoId, conn);
-
-            }
+            _repositorioProductos.Desactivar(productoId);
         }
 
         public void Activar(int productoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                _repositorioProductos!.Activar(productoId, conn);
-
-            }
+            _repositorioProductos.Activar(productoId);
         }
 
         public bool Existe(Producto producto)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioProductos!.Existe(producto, conn);
-            }
+            return _repositorioProductos.Existe(producto);
         }
 
-        public int GetCantidad(Func<ProductoListDto, bool>? filter = null)
+        public int GetCantidad(
+            Func<ProductoListDto, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioProductos!.GetCantidad(conn, filter);
-            }
+            return _repositorioProductos.GetCantidad(filter);
         }
 
-        public List<ProductoListDto> GetLista(int currentPage, int pageSize, Func<ProductoListDto, bool>? filter = null)
+        public List<ProductoListDto> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<ProductoListDto, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioProductos.GetLista(conn, currentPage, pageSize, filter);
-            }
+            return _repositorioProductos.GetLista(
+                currentPage, pageSize, filter);
         }
 
         public Producto? GetProductoPorId(int productoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                var producto = _repositorioProductos.GetProductoPorId(productoId, conn);
-                return producto;
-            }
+            return _repositorioProductos.GetProductoPorId(productoId);
         }
 
         public void Guardar(Producto producto)
         {
-            using (var conn = new SqlConnection(_cadena))
+            if (producto.ProductoId == 0)
             {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (producto.ProductoId == 0)
-                        {
-                            _repositorioProductos!.Agregar(producto, conn, tran);
-                        }
-                        else
-                        {
-                            _repositorioProductos!.Editar(producto, conn, tran);
-                        }
-
-                        tran.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
+                _repositorioProductos.Agregar(producto);
+            }
+            else
+            {
+                _repositorioProductos.Editar(producto);
             }
         }
 
         public void Editar(Producto productoEditado)
         {
-            using (var conn = new SqlConnection(_cadena))
+            if (productoEditado.ProductoId == 0)
             {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (productoEditado.ProductoId == 0)
-                        {
-                            _repositorioProductos!.Agregar(productoEditado, conn, tran);
-                        }
-                        else
-                        {
-                            _repositorioProductos!.Editar(productoEditado, conn, tran);
-                        }
-                        tran.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
+                _repositorioProductos.Agregar(productoEditado);
+            }
+            else
+            {
+                _repositorioProductos.Editar(productoEditado);
             }
         }
     }

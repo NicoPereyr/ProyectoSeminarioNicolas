@@ -1,177 +1,155 @@
-﻿using Dapper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using ProyectoSeminario.Datos.DbContext;
 using ProyectoSeminario.Datos.Interfaces;
-using ProyectoSeminario.Entidades.Dtos;
 using ProyectoSeminario.Entidades.Entidades;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Datos.Repositorios
 {
     public class RepositorioCategorias : IRepositorioCategorias
     {
-        public void Agregar(Categoria categoria, SqlConnection conn, SqlTransaction? tran = null)
+        private readonly ProyectoSeminarioDbContext _context;
+
+        public RepositorioCategorias(ProyectoSeminarioDbContext context)
         {
-            var insertQuery = @"INSERT INTO Categorias (NombreCategoria, Activa) VALUES 
-                        (@NombreCategoria, @Activa); 
-                        SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            int primaryKey = conn.QuerySingle<int>(insertQuery, new
-            {
-                NombreCategoria = categoria.NombreCategoria,
-                Activa = categoria.Activa
-            }, tran);
-
-            if (primaryKey > 0)
-            {
-                categoria.CategoriaId = primaryKey;
-                return;
-            }
-            throw new Exception("No se pudo agregar");
-
+            _context = context;
         }
 
-        public void Desactivar(int categoriaId, SqlConnection conn)
+        public void Agregar(Categoria categoria)
         {
-            try
-            {
-                var updateQuery = @"UPDATE Categorias SET 
-                        Activa = 0 WHERE categoriaId = @CategoriaId";
-
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @CategoriaId = categoriaId,
-                });
-
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo desactivar");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo desactivar, la categoría contiene productos.", ex);
-            }
+            _context.Categorias.Add(categoria);
+            _context.SaveChanges();
         }
 
-        public void Activar(int categoriaId, SqlConnection conn)
+        public void Editar(Categoria categoria)
         {
-            try
+            var categoriaDb = _context.Categorias
+                .Find(categoria.CategoriaId);
+
+            if (categoriaDb == null)
             {
-                var updateQuery = @"UPDATE Categorias SET 
-                        Activa = 1 WHERE categoriaId = @CategoriaId";
-
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @CategoriaId = categoriaId,
-                });
-
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo activar");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo activar", ex);
-            }
-        }
-
-        public void Editar(Categoria categoriaEditada, SqlConnection conn, SqlTransaction? tran = null)
-        {
-            string updateQuery = @"UPDATE Categorias SET NombreCategoria=@NombreCategoria 
-                                    WHERE CategoriaId=@CategoriaId";
-
-            int registrosAfectados = conn.Execute(updateQuery, categoriaEditada, tran);
-            if (registrosAfectados == 0)
-            {
-                throw new Exception("No se pudo editar la categoria");
-            }
-        }
-
-        public bool Existe(Categoria categoria, SqlConnection conn, SqlTransaction? tran = null)
-        {
-            var selectQuery = "SELECT COUNT(*) FROM Categorias WHERE NombreCategoria = @NombreCategoria";
-            if (categoria.CategoriaId != 0)
-            {
-                selectQuery += " AND CategoriaId<>@CategoriaId";
+                throw new Exception("No se encontró la categoría");
             }
 
-            return conn.QuerySingle<int>(selectQuery, categoria) > 0;
+            categoriaDb.NombreCategoria = categoria.NombreCategoria;
+
+            _context.SaveChanges();
         }
 
-        public int GetCantidad(SqlConnection conn, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null)
+        public void Activar(int categoriaId)
         {
-            var selectQuery = @"SELECT c.CategoriaId, c.NombreCategoria, c.Activa
-                          FROM Categorias c";
-            var query = conn.Query<Categoria>(selectQuery).ToList();
-            if (filter != null)
+            var categoria = _context.Categorias.Find(categoriaId);
+
+            if (categoria == null)
             {
-                query = query.Where(filter).ToList();
+                throw new Exception("No se encontró la categoría");
             }
-            return query.Count;
+
+            categoria.Activa = true;
+            _context.SaveChanges();
         }
 
-        public int GetCategoriaIdIfExists(Categoria categoria, SqlConnection conn, SqlTransaction? tran = null)
+        public void Desactivar(int categoriaId)
         {
-            var selectQuery = @"SELECT CategoriaId FROM Categorias 
-                WHERE NombreCategoria = @NombreCategoria";
-            return conn.ExecuteScalar<int>(selectQuery, categoria, tran);
+            var categoria = _context.Categorias.Find(categoriaId);
+
+            if (categoria == null)
+            {
+                throw new Exception("No se encontró la categoría");
+            }
+
+            categoria.Activa = false;
+            _context.SaveChanges();
         }
 
-        public Categoria? GetCategoriaPorId(int categoriaId, SqlConnection conn, SqlTransaction? tran = null)
+        public bool Existe(Categoria categoria)
         {
-            var query = "SELECT * FROM Categorias WHERE CategoriaId = @CategoriaId";
-            return conn.QuerySingleOrDefault<Categoria>(query, new { CategoriaId = categoriaId }, tran);
+            return _context.Categorias.Any(c =>
+                c.NombreCategoria == categoria.NombreCategoria &&
+                c.CategoriaId != categoria.CategoriaId);
         }
 
-        public List<Categoria> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<Categoria, bool>? filter = null, SqlTransaction? tran = null)
+        public int GetCantidad(Func<Categoria, bool>? filter = null)
         {
-            var selectQuery =
-                 @"SELECT c.CategoriaId, c.NombreCategoria, c.Activa
-                          FROM Categorias c";
-
-            var lista = conn.Query<Categoria>(
-                selectQuery,
-                transaction: tran
-            ).ToList();
+            var lista = _context.Categorias
+                .AsNoTracking()
+                .AsEnumerable();
 
             if (filter != null)
             {
-                lista = lista.Where(filter).ToList();
+                lista = lista.Where(filter);
             }
 
-            return lista.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            return lista.Count();
         }
 
-        public List<Categoria> GetProductosPorCategoriaId(int categoriaId, SqlConnection conn, SqlTransaction? tran = null)
+        public List<Categoria> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<Categoria, bool>? filter = null)
         {
-            var query = @"
-            SELECT p.Nombre, p.PrecioVenta 
-            FROM Categorias c
-            JOIN Productos p ON c.CategoriaId = p.CategoriaId
-            WHERE p.CategoriaId = 2 AND p.Activo = 1";
-            return conn.Query<Categoria>(query, new { CategoriaId = categoriaId }, tran).ToList();
-        }
-
-        public bool EstaRelacionada(int categoriaId, SqlConnection conn)
-        {
-            try
+            if (currentPage < 1 || pageSize < 1)
             {
-                var selectQuery = @"SELECT COUNT(*) FROM Productos 
-                WHERE CategoriaId=@CategoriaId";
-                return conn.QuerySingle<int>
-                    (selectQuery, new { @CategoriaId = categoriaId }) > 0;
+                throw new ArgumentException(
+                    "La página y su tamaño deben ser mayores a cero");
             }
-            catch (Exception ex)
+
+            var lista = _context.Categorias
+                .AsNoTracking()
+                .OrderBy(c => c.CategoriaId)
+                .AsEnumerable();
+
+            if (filter != null)
             {
-                throw new Exception("Error en el repo", ex);
+                lista = lista.Where(filter);
             }
+
+            return lista
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
-        public List<Categoria> GetCategoriasActivasComboBox(SqlConnection conn)
+
+        public int GetCategoriaIdIfExists(Categoria categoria)
         {
-            var selectQuery =
-                 @"SELECT CategoriaId, NombreCategoria
-         FROM Categorias WHERE Categorias.Activa = 1";
-            return conn.Query<Categoria>(selectQuery).ToList();
+            return _context.Categorias
+                .Where(c => c.NombreCategoria == categoria.NombreCategoria)
+                .Select(c => c.CategoriaId)
+                .FirstOrDefault();
+        }
+
+        public Categoria? GetCategoriaPorId(int categoriaId)
+        {
+            return _context.Categorias
+                .AsNoTracking()
+                .FirstOrDefault(c => c.CategoriaId == categoriaId);
+        }
+
+        public List<Categoria> GetProductosPorCategoriaId(int categoriaId)
+        {
+            // Se conserva el tipo de retorno de la interfaz original.
+            // Más adelante revisaremos si debe devolver productos.
+            return _context.Categorias
+                .AsNoTracking()
+                .Where(c => c.CategoriaId == categoriaId &&
+                    _context.Productos.Any(p =>
+                        p.CategoriaId == categoriaId && p.Activo))
+                .ToList();
+        }
+
+        public bool EstaRelacionada(int categoriaId)
+        {
+            return _context.Productos
+                .Any(p => p.CategoriaId == categoriaId);
+        }
+
+        public List<Categoria> GetCategoriasActivasComboBox()
+        {
+            return _context.Categorias
+                .AsNoTracking()
+                .Where(c => c.Activa)
+                .OrderBy(c => c.NombreCategoria)
+                .ToList();
         }
     }
 }

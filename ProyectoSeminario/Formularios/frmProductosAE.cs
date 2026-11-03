@@ -62,7 +62,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 else
                 {
                     //Si no tiene imagen muestro Sin Imagen 
-                    picImagen.Image = Image.FromFile(imagenNoDisponible);
+                    picImagen.Image = null;
                 }
             }
         }
@@ -108,7 +108,9 @@ namespace ProyectoSeminario.Windows.Formularios
                 else
                 {
                     //Si no tiene imagen muestro Sin Imagen 
-                    picImagen.Image = Image.FromFile(imagenNoDisponible);
+
+                    picImagen.Image = null;
+
                 }
                 DialogResult = DialogResult.OK;
             }
