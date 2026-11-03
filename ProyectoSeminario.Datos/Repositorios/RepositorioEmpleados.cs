@@ -1,150 +1,113 @@
-﻿using Dapper;
+﻿
+using Microsoft.EntityFrameworkCore;
+using ProyectoSeminario.Datos.DbContext;
 using ProyectoSeminario.Datos.Interfaces;
 using ProyectoSeminario.Entidades.Entidades;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Datos.Repositorios
 {
     public class RepositorioEmpleados : IRepositorioEmpleados
     {
-        public void Agregar(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
+        private readonly ProyectoSeminarioDbContext _context;
+
+        public RepositorioEmpleados(ProyectoSeminarioDbContext context)
         {
-            var insertQuery = @"INSERT INTO Empleados (Nombre, Apellido, Activo, Documento, PorcentajeComision, Sexo) VALUES 
-                        (@Nombre, @Apellido, @Activo, @Documento, @PorcentajeComision, @Sexo); 
-                        SELECT CAST(SCOPE_IDENTITY() as int)";
-
-            int primaryKey = conn.QuerySingle<int>(insertQuery, new
-            {
-                Nombre = empleado.Nombre,
-                Apellido = empleado.Apellido,
-                Documento = empleado.Documento,
-                PorcentajeComision = empleado.PorcentajeComision,
-                Activo = empleado.Activo,
-                Sexo = empleado.Sexo
-            }, tran);
-
-            if (primaryKey > 0)
-            {
-                empleado.EmpleadoId = primaryKey;
-                return;
-            }
-            throw new Exception("No se pudo agregar");
-
+            _context = context;
         }
 
-
-        public void Editar(Empleado empleadoEditado, SqlConnection conn, SqlTransaction? tran = null)
+        public void Agregar(Empleado empleado)
         {
-            string updateQuery = @"UPDATE Empleados SET Nombre=@Nombre, Apellido=@Apellido, Documento=@Documento, PorcentajeComision=@PorcentajeComision, Sexo=@Sexo 
-                                    WHERE EmpleadoId=@EmpleadoId";
-
-            int registrosAfectados = conn.Execute(updateQuery, empleadoEditado, tran);
-            if (registrosAfectados == 0)
-            {
-                throw new Exception("No se pudo editar el empleado");
-            }
+            _context.Empleados.Add(empleado);
+            _context.SaveChanges();
         }
 
-        public bool Existe(Empleado empleado, SqlConnection conn, SqlTransaction? tran = null)
+        public void Editar(Empleado empleado)
         {
-            var selectQuery = "SELECT COUNT(*) FROM Empleados WHERE Documento= @Documento";
-            if (empleado.EmpleadoId != 0)
+            var empleadoDb = _context.Empleados.Find(empleado.EmpleadoId);
+
+            if (empleadoDb == null)
             {
-                selectQuery += " AND EmpleadoId<>@EmpleadoId";
+                throw new Exception("No se encontró el empleado");
             }
 
-            return conn.QuerySingle<int>(selectQuery, empleado) > 0;
+            empleadoDb.Nombre = empleado.Nombre;
+            empleadoDb.Apellido = empleado.Apellido;
+            empleadoDb.Documento = empleado.Documento;
+            empleadoDb.PorcentajeComision = empleado.PorcentajeComision;
+            empleadoDb.Sexo = empleado.Sexo;
+
+            _context.SaveChanges();
         }
 
-        public int GetCantidad(SqlConnection conn, Func<Empleado, bool>? filter = null, SqlTransaction? tran = null)
+        public void Activar(int empleadoId)
         {
-            var selectQuery = @"SELECT * FROM Empleados";
-            var query = conn.Query<Empleado>(selectQuery).ToList();
-            if (filter != null)
-            {
-                query = query.Where(filter).ToList();
-            }
-            return query.Count;
-        }
+            var empleado = _context.Empleados.Find(empleadoId);
 
-        public Empleado? GetEmpleadoPorId(int empleadoId, SqlConnection conn)
-        {
-            string selectQuery = @"SELECT EmpleadoId, Nombre, Apellido, Activo 
-                FROM Empleados 
-                WHERE EmpleadoId=@EmpleadoId";
-            var empleado = conn.QuerySingleOrDefault<Empleado>(selectQuery, new { @EmpleadoId = empleadoId });
-
-            // Si el cliente no existe, retornamos null
             if (empleado == null)
-            {
-                return null;
-            }
-            return empleado;
+                throw new Exception("No se encontró el empleado");
+
+            empleado.Activo = true;
+            _context.SaveChanges();
         }
 
-        public List<Empleado> GetLista(SqlConnection conn, int currentPage, int pageSize, Func<Empleado, bool>? filter = null, SqlTransaction? tran = null)
+        public void Desactivar(int empleadoId)
         {
-            var selectQuery =
-                 @"SELECT e.EmpleadoId, e.Nombre, e.Apellido, e.Activo, e.Documento, e.PorcentajeComision, e.Sexo
-                          FROM Empleados e";
+            var empleado = _context.Empleados.Find(empleadoId);
 
-            var lista = conn.Query<Empleado>(
-                selectQuery,
-                transaction: tran
-            ).ToList();
+            if (empleado == null)
+                throw new Exception("No se encontró el empleado");
+
+            empleado.Activo = false;
+            _context.SaveChanges();
+        }
+
+        public bool Existe(Empleado empleado)
+        {
+            return _context.Empleados.Any(e =>
+                e.Documento == empleado.Documento &&
+                e.EmpleadoId != empleado.EmpleadoId);
+        }
+
+        public Empleado? GetEmpleadoPorId(int empleadoId)
+        {
+            return _context.Empleados
+                .AsNoTracking()
+                .FirstOrDefault(e => e.EmpleadoId == empleadoId);
+        }
+
+        public int GetCantidad(Func<Empleado, bool>? filter = null)
+        {
+            var lista = _context.Empleados
+                .AsNoTracking()
+                .AsEnumerable();
 
             if (filter != null)
-            {
-                lista = lista.Where(filter).ToList();
-            }
+                lista = lista.Where(filter);
 
-            return lista.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            return lista.Count();
         }
-        public void Desactivar(int empleadoId, SqlConnection conn)
+
+        public List<Empleado> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<Empleado, bool>? filter = null)
         {
-            try
-            {
-                var updateQuery = @"UPDATE Empleados SET 
-                        Activo = 0 WHERE empleadoId = @EmpleadoId";
+            if (currentPage < 1 || pageSize < 1)
+                throw new ArgumentException(
+                    "La página y el tamaño deben ser mayores a cero");
 
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @EmpleadoId = empleadoId,
-                });
+            var lista = _context.Empleados
+                .AsNoTracking()
+                .OrderBy(e => e.EmpleadoId)
+                .AsEnumerable();
 
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo desactivar");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo desactivar, la categoría contiene productos.", ex);
-            }
+            if (filter != null)
+                lista = lista.Where(filter);
+
+            return lista
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
-
-        public void Activar(int empleadoId, SqlConnection conn)
-        {
-            try
-            {
-                var updateQuery = @"UPDATE Empleados SET 
-                        Activo = 1 WHERE empleadoId = @EmpleadoId";
-
-                int registrosAfectados = conn.Execute(updateQuery, new
-                {
-                    @EmpleadoId = empleadoId,
-                });
-
-                if (registrosAfectados == 0)
-                {
-                    throw new Exception("No se pudo activar");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("No se pudo activar", ex);
-            }
-        }
-
     }
 }

@@ -1,131 +1,76 @@
-﻿using ProyectoSeminario.Datos.Interfaces;
+﻿
+using ProyectoSeminario.Datos.Interfaces;
 using ProyectoSeminario.Entidades.Entidades;
 using ProyectoSeminario.Servicios.Interfaces;
-using System.Data.SqlClient;
 
 namespace ProyectoSeminario.Servicios.Servicios
 {
     public class ServiciosEmpleados : IServiciosEmpleados
     {
-
         private readonly IRepositorioEmpleados _repositorioEmpleados;
-        private readonly string _cadena;
 
-        public ServiciosEmpleados(
-            IRepositorioEmpleados repositorioEmpleados,
-            string cadena)
+        public ServiciosEmpleados(IRepositorioEmpleados repositorioEmpleados)
         {
-            _repositorioEmpleados = repositorioEmpleados;
-            _cadena = cadena;
+            _repositorioEmpleados = repositorioEmpleados
+                ?? throw new ArgumentNullException(nameof(repositorioEmpleados));
         }
+
         public void Desactivar(int empleadoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                _repositorioEmpleados!.Desactivar(empleadoId, conn);
-
-            }
+            _repositorioEmpleados.Desactivar(empleadoId);
         }
 
         public void Activar(int empleadoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                _repositorioEmpleados!.Activar(empleadoId, conn);
-
-            }
+            _repositorioEmpleados.Activar(empleadoId);
         }
 
         public bool Existe(Empleado empleado)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioEmpleados!.Existe(empleado, conn);
-            }
+            return _repositorioEmpleados.Existe(empleado);
         }
 
         public int GetCantidad(Func<Empleado, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioEmpleados!.GetCantidad(conn, filter);
-            }
+            return _repositorioEmpleados.GetCantidad(filter);
         }
 
         public Empleado? GetEmpleadoPorId(int empleadoId)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                var empleado = _repositorioEmpleados.GetEmpleadoPorId(empleadoId, conn);
-                return empleado;
-            }
+            return _repositorioEmpleados.GetEmpleadoPorId(empleadoId);
         }
 
-        public List<Empleado> GetLista(int currentPage, int pageSize, Func<Empleado, bool>? filter = null)
+        public List<Empleado> GetLista(
+            int currentPage,
+            int pageSize,
+            Func<Empleado, bool>? filter = null)
         {
-            using (var conn = new SqlConnection(_cadena))
-            {
-                conn.Open();
-                return _repositorioEmpleados.GetLista(conn, currentPage, pageSize, filter);
-            }
+            return _repositorioEmpleados.GetLista(
+                currentPage, pageSize, filter);
         }
 
         public void Guardar(Empleado empleado)
         {
-            using (var conn = new SqlConnection(_cadena))
+            if (empleado.EmpleadoId == 0)
             {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (empleado.EmpleadoId == 0)
-                        {
-                            _repositorioEmpleados!.Agregar(empleado, conn, tran);
-                        }
-
-                        tran.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
+                _repositorioEmpleados.Agregar(empleado);
+            }
+            else
+            {
+                _repositorioEmpleados.Editar(empleado);
             }
         }
+
         public void Editar(Empleado empleadoEditado)
         {
-            using (var conn = new SqlConnection(_cadena))
+            if (empleadoEditado.EmpleadoId == 0)
             {
-                conn.Open();
-                using (var tran = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        if (empleadoEditado.EmpleadoId == 0)
-                        {
-                            _repositorioEmpleados!.Agregar(empleadoEditado, conn, tran);
-                        }
-                        else
-                        {
-                            _repositorioEmpleados!.Editar(empleadoEditado, conn, tran);
-                        }
-                        tran.Commit();
-                    }
-                    catch (Exception)
-                    {
-                        tran.Rollback();
-                        throw;
-                    }
-                }
+                _repositorioEmpleados.Agregar(empleadoEditado);
             }
-
+            else
+            {
+                _repositorioEmpleados.Editar(empleadoEditado);
+            }
         }
     }
 }

@@ -28,23 +28,32 @@ namespace ProyectoSeminario.Windows.Formularios
             DialogResult = DialogResult.Cancel;
         }
 
+
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             if (ValidarDatos())
             {
-                if (empleado is null)
+                bool esNuevo = empleado is null;
+
+                if (esNuevo)
                 {
                     empleado = new Empleado();
+                    empleado.Activo = true;
                 }
-                empleado.Nombre = txtNombre.Text;
-                empleado.Apellido = txtApellido.Text;
+
+                empleado!.Nombre = txtNombre.Text.Trim();
+                empleado.Apellido = txtApellido.Text.Trim();
                 empleado.Documento = int.Parse(txtDocumento.Text);
-                empleado.PorcentajeComision = int.Parse(txtPorcentajeComision.Text);
-                empleado.Activo = true;
-                empleado.Sexo = true;
+                empleado.PorcentajeComision =
+                    int.Parse(txtPorcentajeComision.Text);
+
+                empleado.Sexo = txtSexo.Text.Trim()
+                    .Equals("Hombre", StringComparison.OrdinalIgnoreCase);
+
                 DialogResult = DialogResult.OK;
             }
         }
+
 
         private bool ValidarDatos()
         {
@@ -76,6 +85,16 @@ namespace ProyectoSeminario.Windows.Formularios
                 errorProvider1.SetError(txtPorcentajeComision, "Porcentaje de comisión es requerido");
             }
 
+            string sexo = txtSexo.Text.Trim();
+
+            if (!sexo.Equals("Hombre", StringComparison.OrdinalIgnoreCase)
+                && !sexo.Equals("Mujer", StringComparison.OrdinalIgnoreCase))
+            {
+                valido = false;
+                errorProvider1.SetError(txtSexo,
+                    "Debe ingresar Hombre o Mujer");
+            }
+
 
             return valido;
         }
@@ -99,7 +118,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 Documento = empleadoDto.Documento,
                 PorcentajeComision = empleadoDto.PorcentajeComision,
                 Sexo=empleadoDto.Sexo,
-                Activo = true 
+                Activo = empleadoDto.Activo
             };
         }
 
@@ -113,7 +132,7 @@ namespace ProyectoSeminario.Windows.Formularios
                 txtApellido.Text = empleado.Apellido;
                 txtDocumento.Text = empleado.Documento.ToString();
                 txtPorcentajeComision.Text = empleado.PorcentajeComision.ToString();
-                txtSexo.Text=empleado.Sexo.ToString();
+                txtSexo.Text = empleado.Sexo ? "Hombre" : "Mujer";
             }
         }
     }

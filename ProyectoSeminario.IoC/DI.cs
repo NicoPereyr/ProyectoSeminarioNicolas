@@ -40,12 +40,9 @@ namespace ProyectoSeminario.IoC
 
             service.AddScoped<IServiciosCategorias, ServiciosCategorias>();
 
-            service.AddScoped<IServiciosEmpleados>(sp =>
-            {
-                var repositorio = new RepositorioEmpleados();
-                var repositorioEmpleados = new RepositorioEmpleados();
-                return new ServiciosEmpleados(repositorio, cadena);
-            });
+
+            service.AddScoped<IServiciosEmpleados, ServiciosEmpleados>();
+
             return service.BuildServiceProvider();
         }
     }
