@@ -34,14 +34,12 @@ namespace ProyectoSeminario.IoC
             service.AddScoped<IRepositorioProductos, RepositorioProductos>();
             service.AddScoped<IRepositorioCategorias, RepositorioCategorias>();
             service.AddScoped<IRepositorioEmpleados, RepositorioEmpleados>();
-
+            service.AddScoped<IRepositorioVentas, RepositorioVentas>();
 
             service.AddScoped<IServiciosProductos, ServiciosProductos>();
-
             service.AddScoped<IServiciosCategorias, ServiciosCategorias>();
-
-
             service.AddScoped<IServiciosEmpleados, ServiciosEmpleados>();
+            service.AddScoped<IServiciosVentas, ServiciosVentas>();
 
             return service.BuildServiceProvider();
         }
