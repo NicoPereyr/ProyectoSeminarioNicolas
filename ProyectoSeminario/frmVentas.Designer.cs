@@ -44,6 +44,11 @@
             colCantidad = new DataGridViewTextBoxColumn();
             colPrecioUnitario = new DataGridViewTextBoxColumn();
             colSubtotal = new DataGridViewTextBoxColumn();
+            lblTotalTexto = new Label();
+            lblTotal = new Label();
+            btnQuitarProducto = new Button();
+            btnGuardarVenta = new Button();
+            btnCancelar = new Button();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalleVenta).BeginInit();
             SuspendLayout();
@@ -98,7 +103,7 @@
             // lblProducto
             // 
             lblProducto.AutoSize = true;
-            lblProducto.Location = new Point(36, 113);
+            lblProducto.Location = new Point(37, 106);
             lblProducto.Name = "lblProducto";
             lblProducto.Size = new Size(59, 15);
             lblProducto.TabIndex = 6;
@@ -107,7 +112,7 @@
             // lblCantidad
             // 
             lblCantidad.AutoSize = true;
-            lblCantidad.Location = new Point(34, 168);
+            lblCantidad.Location = new Point(32, 157);
             lblCantidad.Name = "lblCantidad";
             lblCantidad.Size = new Size(58, 15);
             lblCantidad.TabIndex = 7;
@@ -117,14 +122,14 @@
             // 
             cboProductos.DropDownStyle = ComboBoxStyle.DropDownList;
             cboProductos.FormattingEnabled = true;
-            cboProductos.Location = new Point(32, 131);
+            cboProductos.Location = new Point(33, 124);
             cboProductos.Name = "cboProductos";
             cboProductos.Size = new Size(280, 23);
             cboProductos.TabIndex = 8;
             // 
             // nudCantidad
             // 
-            nudCantidad.Location = new Point(34, 186);
+            nudCantidad.Location = new Point(32, 175);
             nudCantidad.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidad.Name = "nudCantidad";
             nudCantidad.Size = new Size(80, 23);
@@ -133,7 +138,7 @@
             // 
             // btnAgregarProducto
             // 
-            btnAgregarProducto.Location = new Point(205, 186);
+            btnAgregarProducto.Location = new Point(204, 167);
             btnAgregarProducto.Name = "btnAgregarProducto";
             btnAgregarProducto.Size = new Size(150, 35);
             btnAgregarProducto.TabIndex = 10;
@@ -147,7 +152,7 @@
             dgvDetalleVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDetalleVenta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDetalleVenta.Columns.AddRange(new DataGridViewColumn[] { colProductoId, colProducto, colCantidad, colPrecioUnitario, colSubtotal });
-            dgvDetalleVenta.Location = new Point(12, 227);
+            dgvDetalleVenta.Location = new Point(14, 208);
             dgvDetalleVenta.MultiSelect = false;
             dgvDetalleVenta.Name = "dgvDetalleVenta";
             dgvDetalleVenta.ReadOnly = true;
@@ -187,11 +192,62 @@
             colSubtotal.Name = "colSubtotal";
             colSubtotal.ReadOnly = true;
             // 
+            // lblTotalTexto
+            // 
+            lblTotalTexto.AutoSize = true;
+            lblTotalTexto.Location = new Point(14, 422);
+            lblTotalTexto.Name = "lblTotalTexto";
+            lblTotalTexto.Size = new Size(96, 15);
+            lblTotalTexto.TabIndex = 12;
+            lblTotalTexto.Text = "Total de la venta:";
+            // 
+            // lblTotal
+            // 
+            lblTotal.AutoSize = true;
+            lblTotal.Font = new Font("Segoe UI", 16F);
+            lblTotal.Location = new Point(14, 449);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(66, 30);
+            lblTotal.TabIndex = 13;
+            lblTotal.Text = "$0,00";
+            // 
+            // btnQuitarProducto
+            // 
+            btnQuitarProducto.Location = new Point(474, 402);
+            btnQuitarProducto.Name = "btnQuitarProducto";
+            btnQuitarProducto.Size = new Size(140, 35);
+            btnQuitarProducto.TabIndex = 14;
+            btnQuitarProducto.Text = "Quitar producto";
+            btnQuitarProducto.UseVisualStyleBackColor = true;
+            // 
+            // btnGuardarVenta
+            // 
+            btnGuardarVenta.Location = new Point(474, 451);
+            btnGuardarVenta.Name = "btnGuardarVenta";
+            btnGuardarVenta.Size = new Size(140, 35);
+            btnGuardarVenta.TabIndex = 15;
+            btnGuardarVenta.Text = "Guardar venta";
+            btnGuardarVenta.UseVisualStyleBackColor = true;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.Location = new Point(474, 503);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(140, 35);
+            btnCancelar.TabIndex = 16;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = true;
+            // 
             // frmVentas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 561);
+            Controls.Add(btnCancelar);
+            Controls.Add(btnGuardarVenta);
+            Controls.Add(btnQuitarProducto);
+            Controls.Add(lblTotal);
+            Controls.Add(lblTotalTexto);
             Controls.Add(dgvDetalleVenta);
             Controls.Add(btnAgregarProducto);
             Controls.Add(nudCantidad);
@@ -207,6 +263,7 @@
             Name = "frmVentas";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Ventas";
+            Load += frmVentas_Load;
             ((System.ComponentModel.ISupportInitialize)nudCantidad).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalleVenta).EndInit();
             ResumeLayout(false);
@@ -231,5 +288,10 @@
         private DataGridViewTextBoxColumn colCantidad;
         private DataGridViewTextBoxColumn colPrecioUnitario;
         private DataGridViewTextBoxColumn colSubtotal;
+        private Label lblTotalTexto;
+        private Label lblTotal;
+        private Button btnQuitarProducto;
+        private Button btnGuardarVenta;
+        private Button btnCancelar;
     }
 }
