@@ -131,7 +131,9 @@ namespace ProyectoSeminario.Windows.Formularios
 
         private void btnOrdenes_Click(object sender, EventArgs e)
         {
-
+            frmVentas frm = new frmVentas(_serviceProvider!);
+            AbrirFormularioEnPanel(frm);
+            panelFormHijo.Visible = true;
         }
 
         private void btnEmpleados_Click(object sender, EventArgs e)

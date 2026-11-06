@@ -144,6 +144,7 @@
             btnAgregarProducto.TabIndex = 10;
             btnAgregarProducto.Text = "Agregar producto";
             btnAgregarProducto.UseVisualStyleBackColor = true;
+            btnAgregarProducto.Click += btnAgregarProducto_Click;
             // 
             // dgvDetalleVenta
             // 
@@ -219,6 +220,7 @@
             btnQuitarProducto.TabIndex = 14;
             btnQuitarProducto.Text = "Quitar producto";
             btnQuitarProducto.UseVisualStyleBackColor = true;
+            btnQuitarProducto.Click += btnQuitarProducto_Click;
             // 
             // btnGuardarVenta
             // 
