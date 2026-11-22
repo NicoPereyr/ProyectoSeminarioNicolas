@@ -10,6 +10,7 @@ namespace ProyectoSeminario.Windows
     {
         private readonly IServiciosEmpleados _servicioEmpleados;
         private readonly IServiciosProductos _servicioProductos;
+        private readonly IServiciosVentas _servicioVentas;
 
         private readonly List<DetalleVenta> _detallesVenta = new();
 
@@ -20,9 +21,14 @@ namespace ProyectoSeminario.Windows
 
             _servicioEmpleados = serviceProvider
                 .GetRequiredService<IServiciosEmpleados>();
+
             _servicioProductos = serviceProvider
                 .GetRequiredService<IServiciosProductos>();
+
+            _servicioVentas = serviceProvider
+                .GetRequiredService<IServiciosVentas>();
         }
+
 
         private void CargarEmpleados()
         {
@@ -185,6 +191,73 @@ namespace ProyectoSeminario.Windows
             _detallesVenta.Remove(detalle);
 
             ActualizarDetalleVenta();
+        }
+
+
+        private void btnGuardarVenta_Click(object sender, EventArgs e)
+        {
+            // Validar que se haya seleccionado un empleado
+            if (cboEmpleados.SelectedValue is not int empleadoId)
+            {
+                MessageBox.Show(
+                    "Debe seleccionar un empleado.",
+                    "Atención",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validar que haya productos en la venta
+            if (_detallesVenta.Count == 0)
+            {
+                MessageBox.Show(
+                    "Debe agregar al menos un producto.",
+                    "Atención",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Construir la venta con detalles nuevos
+            var venta = new Venta
+            {
+                EmpleadoId = empleadoId,
+                Detalles = _detallesVenta.Select(d => new DetalleVenta
+                {
+                    ProductoId = d.ProductoId,
+                    Cantidad = d.Cantidad
+                }).ToList()
+            };
+
+            try
+            {
+                // ServiciosVentas valida, calcula y guarda
+                _servicioVentas.Guardar(venta);
+
+                MessageBox.Show(
+                    $"Venta N° {venta.VentaId} registrada correctamente.\n" +
+                    $"Total: {venta.Total.ToString("C2", CultureInfo.GetCultureInfo("es-AR"))}",
+                    "Venta registrada",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                // Limpiar después de guardar correctamente
+                _detallesVenta.Clear();
+                ActualizarDetalleVenta();
+
+                cboEmpleados.SelectedIndex = -1;
+                cboProductos.SelectedIndex = -1;
+                nudCantidad.Value = 1;
+                dtpFechaVenta.Value = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"No se pudo registrar la venta:\n{ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
     }

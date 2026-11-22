@@ -230,6 +230,7 @@
             btnGuardarVenta.TabIndex = 15;
             btnGuardarVenta.Text = "Guardar venta";
             btnGuardarVenta.UseVisualStyleBackColor = true;
+            btnGuardarVenta.Click += btnGuardarVenta_Click;
             // 
             // btnCancelar
             // 
