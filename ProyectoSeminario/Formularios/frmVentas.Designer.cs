@@ -49,6 +49,7 @@
             btnQuitarProducto = new Button();
             btnGuardarVenta = new Button();
             btnCancelar = new Button();
+            btnVerHistorial = new Button();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDetalleVenta).BeginInit();
             SuspendLayout();
@@ -241,11 +242,24 @@
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
             // 
+            // btnVerHistorial
+            // 
+            btnVerHistorial.Cursor = Cursors.Hand;
+            btnVerHistorial.FlatStyle = FlatStyle.Flat;
+            btnVerHistorial.Location = new Point(12, 492);
+            btnVerHistorial.Name = "btnVerHistorial";
+            btnVerHistorial.Size = new Size(125, 35);
+            btnVerHistorial.TabIndex = 17;
+            btnVerHistorial.Text = "Ver historial";
+            btnVerHistorial.UseVisualStyleBackColor = true;
+            btnVerHistorial.Click += btnVerHistorial_Click;
+            // 
             // frmVentas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 561);
+            Controls.Add(btnVerHistorial);
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardarVenta);
             Controls.Add(btnQuitarProducto);
@@ -296,5 +310,6 @@
         private Button btnQuitarProducto;
         private Button btnGuardarVenta;
         private Button btnCancelar;
+        private Button btnVerHistorial;
     }
 }

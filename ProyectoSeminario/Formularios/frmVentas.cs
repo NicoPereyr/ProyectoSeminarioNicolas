@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProyectoSeminario.Servicios.Interfaces;
 using ProyectoSeminario.Entidades.Entidades;
 using System.Globalization;
+using ProyectoSeminario.Windows.Formularios;
 
 namespace ProyectoSeminario.Windows
 {
@@ -11,6 +12,7 @@ namespace ProyectoSeminario.Windows
         private readonly IServiciosEmpleados _servicioEmpleados;
         private readonly IServiciosProductos _servicioProductos;
         private readonly IServiciosVentas _servicioVentas;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly List<DetalleVenta> _detallesVenta = new();
 
@@ -18,6 +20,7 @@ namespace ProyectoSeminario.Windows
         public frmVentas(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
 
             _servicioEmpleados = serviceProvider
                 .GetRequiredService<IServiciosEmpleados>();
@@ -258,6 +261,14 @@ namespace ProyectoSeminario.Windows
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+
+        private void btnVerHistorial_Click(object sender, EventArgs e)
+        {
+            var historial = new frmHistorialVentas(_serviceProvider);
+
+            historial.ShowDialog(this);
         }
 
     }

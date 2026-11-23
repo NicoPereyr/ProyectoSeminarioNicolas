@@ -32,6 +32,7 @@
             btnCombos = new Button();
             btnOrdenes = new Button();
             btnCategorias = new Button();
+            btnHistorialVentas = new Button();
             panel1 = new Panel();
             btnMinimizar = new PictureBox();
             btnRestaurar = new PictureBox();
@@ -118,12 +119,30 @@
             btnCategorias.UseVisualStyleBackColor = true;
             btnCategorias.Click += btnCategorias_Click;
             // 
+            // btnHistorialVentas
+            //
+            btnHistorialVentas.Cursor = Cursors.Hand;
+            btnHistorialVentas.FlatAppearance.BorderSize = 0;
+            btnHistorialVentas.FlatStyle = FlatStyle.Flat;
+            btnHistorialVentas.Font = new Font("Comic Sans MS", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnHistorialVentas.Image = Properties.Resources.ordenes;
+            btnHistorialVentas.ImageAlign = ContentAlignment.BottomCenter;
+            btnHistorialVentas.Location = new Point(0, 529);
+            btnHistorialVentas.Name = "btnHistorialVentas";
+            btnHistorialVentas.Size = new Size(136, 90);
+            btnHistorialVentas.TabIndex = 0;
+            btnHistorialVentas.Text = "Historial";
+            btnHistorialVentas.TextAlign = ContentAlignment.BottomCenter;
+            btnHistorialVentas.UseVisualStyleBackColor = true;
+            btnHistorialVentas.Click += btnHistorialVentas_Click;
+            //
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panel1.BackColor = Color.PaleTurquoise;
             panel1.Controls.Add(btnMinimizar);
             panel1.Controls.Add(btnCombos);
+            panel1.Controls.Add(btnHistorialVentas);
             panel1.Controls.Add(btnRestaurar);
             panel1.Controls.Add(btnCerrar);
             panel1.Controls.Add(btnMaximizar);
@@ -133,16 +152,16 @@
             panel1.Controls.Add(btnOrdenes);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(136, 627);
+            panel1.Size = new Size(136, 720);
             panel1.TabIndex = 1;
             // 
             // btnMinimizar
             // 
-            btnMinimizar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnMinimizar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnMinimizar.BackColor = Color.DarkSlateGray;
             btnMinimizar.Cursor = Cursors.Hand;
             btnMinimizar.Image = Properties.Resources.minimizar;
-            btnMinimizar.Location = new Point(33, 598);
+            btnMinimizar.Location = new Point(33, 690);
             btnMinimizar.Name = "btnMinimizar";
             btnMinimizar.Size = new Size(25, 25);
             btnMinimizar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -152,11 +171,11 @@
             // 
             // btnRestaurar
             // 
-            btnRestaurar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRestaurar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnRestaurar.BackColor = Color.DarkSlateGray;
             btnRestaurar.Cursor = Cursors.Hand;
             btnRestaurar.Image = Properties.Resources.restaurar;
-            btnRestaurar.Location = new Point(33, 555);
+            btnRestaurar.Location = new Point(33, 649);
             btnRestaurar.Name = "btnRestaurar";
             btnRestaurar.Size = new Size(25, 25);
             btnRestaurar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -166,11 +185,11 @@
             // 
             // btnCerrar
             // 
-            btnCerrar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnCerrar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCerrar.BackColor = Color.DarkSlateGray;
             btnCerrar.Cursor = Cursors.Hand;
             btnCerrar.Image = Properties.Resources.Close;
-            btnCerrar.Location = new Point(78, 598);
+            btnCerrar.Location = new Point(78, 690);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(25, 25);
             btnCerrar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -180,10 +199,11 @@
             // 
             // btnMaximizar
             // 
+            btnMaximizar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnMaximizar.BackColor = Color.DarkSlateGray;
             btnMaximizar.Cursor = Cursors.Hand;
             btnMaximizar.Image = Properties.Resources.maximizar;
-            btnMaximizar.Location = new Point(78, 555);
+            btnMaximizar.Location = new Point(78, 649);
             btnMaximizar.Name = "btnMaximizar";
             btnMaximizar.Size = new Size(25, 25);
             btnMaximizar.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -235,7 +255,7 @@
             panelFormHijo.AutoSize = true;
             panelFormHijo.Location = new Point(134, 28);
             panelFormHijo.Name = "panelFormHijo";
-            panelFormHijo.Size = new Size(866, 599);
+            panelFormHijo.Size = new Size(866, 692);
             panelFormHijo.TabIndex = 3;
             panelFormHijo.Visible = false;
             // 
@@ -246,13 +266,13 @@
             BackColor = Color.Gainsboro;
             BackgroundImage = Properties.Resources.logopan;
             BackgroundImageLayout = ImageLayout.Center;
-            ClientSize = new Size(1000, 627);
+            ClientSize = new Size(1000, 720);
             Controls.Add(panelFormHijo);
             Controls.Add(barraTitulo);
             Controls.Add(panel1);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
-            MinimumSize = new Size(1000, 600);
+            MinimumSize = new Size(1000, 720);
             Name = "frmMenuPrincipal";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Carlos Food Truck";
@@ -281,5 +301,6 @@
         private Panel panelContenedorPrincipal;
         private Panel panelFormHijo;
         private Button btnEmpleados;
+        private Button btnHistorialVentas;
     }
 }

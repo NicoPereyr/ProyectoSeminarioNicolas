@@ -145,5 +145,14 @@ namespace ProyectoSeminario.Windows.Formularios
             }
 
         }
+        private void btnHistorialVentas_Click(object sender, EventArgs e)
+        {
+            frmHistorialVentas frm =
+                new frmHistorialVentas(_serviceProvider!);
+
+            AbrirFormularioEnPanel(frm);
+
+            panelFormHijo.Visible = true;
+        }
     }
 }
