@@ -11,6 +11,7 @@ namespace ProyectoSeminario.Windows.Formularios
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.DoubleBuffered = true;
             _serviceProvider = serviceProvider;
+            AplicarEstiloModerno();
         }
 
         private int tolerance = 12;
