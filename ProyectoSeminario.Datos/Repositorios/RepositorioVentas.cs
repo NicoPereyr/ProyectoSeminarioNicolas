@@ -31,15 +31,20 @@ namespace ProyectoSeminario.Datos.Repositorios
                 .FirstOrDefault(v => v.VentaId == ventaId);
         }
 
+
         public List<Venta> GetLista()
         {
             return _context.Ventas
                 .AsNoTracking()
                 .Include(v => v.Empleado)
+                .Include(v => v.Detalles)
+                    .ThenInclude(d => d.Producto)
+                .AsSplitQuery()
                 .OrderByDescending(v => v.FechaVenta)
                 .ThenByDescending(v => v.VentaId)
                 .ToList();
         }
+
 
         public void Anular(int ventaId)
         {

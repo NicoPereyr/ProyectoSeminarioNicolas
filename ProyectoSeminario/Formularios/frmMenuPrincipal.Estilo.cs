@@ -1,10 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Globalization;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ProyectoSeminario.Servicios.Interfaces;
+using System.Globalization;
+
+using FormsPlot = ScottPlot.WinForms.FormsPlot;
+
 
 namespace ProyectoSeminario.Windows.Formularios
 {
@@ -207,7 +206,7 @@ namespace ProyectoSeminario.Windows.Formularios
             var banner = new Panel
             {
                 Name = "panelBanner",
-                Location = new Point(36, 296),
+                Location = new Point(36, 650),
                 Size = new Size(835, 280),
                 BackColor = Color.FromArgb(40, 20, 20),
                 BackgroundImage = Image.FromFile(
@@ -228,16 +227,186 @@ namespace ProyectoSeminario.Windows.Formularios
                 BackColor = Color.FromArgb(190, 68, 44),
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand,
-                Location = new Point(36, 600),
+                Location = new Point(36, 950),
                 Size = new Size(195, 48)
             };
             botonNuevaVenta.FlatAppearance.BorderSize = 0;
             botonNuevaVenta.Click += btnOrdenes_Click;
             panelInicioModerno.Controls.Add(botonNuevaVenta);
 
+            AgregarGraficoVentas(panelInicioModerno);
+            AgregarRankingProductos(panelInicioModerno);
+
             panelFormHijo.Controls.Add(panelInicioModerno);
             panelFormHijo.Visible = true;
         }
+
+
+        private void AgregarGraficoVentas(Panel contenedor)
+        {
+            // Obtener las ventas registradas
+            var servicioVentas = _serviceProvider!
+                .GetRequiredService<IServiciosVentas>();
+
+            var ventas = servicioVentas.GetLista()
+                .Where(v => !v.Anulada)
+                .ToList();
+
+            // Obtener el lunes de la semana actual
+            DateTime hoy = DateTime.Today;
+
+            int diasDesdeLunes =
+                ((int)hoy.DayOfWeek + 6) % 7;
+
+            DateTime lunes = hoy.AddDays(-diasDesdeLunes);
+
+            string[] dias =
+            {
+        "Lun", "Mar", "Mié", "Jue",
+        "Vie", "Sáb", "Dom"
+    };
+
+            double[] importes = new double[7];
+
+            // Calcular ventas de cada día
+            for (int i = 0; i < 7; i++)
+            {
+                DateTime fecha = lunes.AddDays(i);
+
+                importes[i] = (double)ventas
+                    .Where(v => v.FechaVenta.Date == fecha.Date)
+                    .Sum(v => v.Total);
+            }
+
+            // Título
+            var titulo = new System.Windows.Forms.Label
+            {
+                Text = "Ventas de la semana",
+                Font = new System.Drawing.Font(
+                    "Segoe UI", 16F, System.Drawing.FontStyle.Bold),
+                ForeColor = System.Drawing.Color.FromArgb(38, 37, 37),
+                Location = new Point(36, 296),
+                Size = new Size(485, 35)
+            };
+
+            contenedor.Controls.Add(titulo);
+
+            // Crear gráfico
+            var grafico = new FormsPlot
+            {
+                Location = new Point(36, 340),
+                Size = new Size(485, 265),
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
+            };
+
+            // Dibujar las siete barras
+            grafico.Plot.Add.Bars(importes);
+
+            // Etiquetas de los días
+            ScottPlot.Tick[] etiquetas = new ScottPlot.Tick[7];
+
+            for (int i = 0; i < 7; i++)
+            {
+                etiquetas[i] = new ScottPlot.Tick(i, dias[i]);
+            }
+
+            grafico.Plot.Axes.Bottom.TickGenerator =
+                new ScottPlot.TickGenerators.NumericManual(etiquetas);
+
+            grafico.Plot.Axes.Margins(bottom: 0);
+
+            grafico.Refresh();
+
+            contenedor.Controls.Add(grafico);
+        }
+
+
+        private void AgregarRankingProductos(Panel contenedor)
+        {
+            var titulo = new Label
+            {
+                Text = "Productos más vendidos",
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(38, 37, 37),
+                Location = new Point(540, 296),
+                Size = new Size(330, 40)
+            };
+
+            contenedor.Controls.Add(titulo);
+
+            var panelRanking = new Panel
+            {
+                Location = new Point(540, 340),
+                Size = new Size(331, 265),
+                BackColor = Color.White,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left
+            };
+
+            var servicioVentas = _serviceProvider!
+                .GetRequiredService<IServiciosVentas>();
+
+            var ranking = servicioVentas.GetLista()
+                .Where(v => !v.Anulada)
+                .SelectMany(v => v.Detalles)
+                .GroupBy(d => d.ProductoId)
+                .Select(g => new
+                {
+                    Producto = g.First().Producto?.Nombre ?? "Producto sin nombre",
+                    Cantidad = g.Sum(d => d.Cantidad)
+                })
+                .OrderByDescending(x => x.Cantidad)
+                .ThenBy(x => x.Producto)
+                .Take(5)
+                .ToList();
+
+            if (ranking.Count == 0)
+            {
+                panelRanking.Controls.Add(new Label
+                {
+                    Text = "Todavía no hay productos vendidos.",
+                    Font = new Font("Segoe UI", 12F),
+                    ForeColor = Color.Gray,
+                    Location = new Point(20, 25),
+                    AutoSize = true
+                });
+            }
+            else
+            {
+                int y = 20;
+
+                for (int i = 0; i < ranking.Count; i++)
+                {
+                    var producto = ranking[i];
+
+                    var etiqueta = new Label
+                    {
+                        Text = $"{i + 1}. {producto.Producto}",
+                        Font = new Font("Segoe UI", 10F),
+                        ForeColor = Color.FromArgb(50, 50, 50),
+                        Location = new Point(15, y),
+                        Size = new Size(230, 30)
+                    };
+
+                    var cantidad = new Label
+                    {
+                        Text = $"{producto.Cantidad} uds.",
+                        Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(145, 39, 34),
+                        Location = new Point(245, y),
+                        Size = new Size(72, 30),
+                        TextAlign = ContentAlignment.MiddleRight
+                    };
+
+                    panelRanking.Controls.Add(etiqueta);
+                    panelRanking.Controls.Add(cantidad);
+
+                    y += 45;
+                }
+            }
+
+            contenedor.Controls.Add(panelRanking);
+        }
+
 
         private static void AgregarTarjeta(Panel parent, string titulo, string valor, int x, int y)
         {
