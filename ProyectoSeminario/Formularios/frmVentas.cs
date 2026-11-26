@@ -271,6 +271,31 @@ namespace ProyectoSeminario.Windows
             historial.ShowDialog(this);
         }
 
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            if (_detallesVenta.Count > 0)
+            {
+                var respuesta = MessageBox.Show(
+                    "¿Querés cancelar la venta actual? Se quitarán todos los productos agregados.",
+                    "Confirmar cancelación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (respuesta != DialogResult.Yes)
+                    return;
+            }
+
+            // Limpiar los detalles de la venta
+            _detallesVenta.Clear();
+            ActualizarDetalleVenta();
+
+            // Restablecer los controles
+            cboEmpleados.SelectedIndex = -1;
+            cboProductos.SelectedIndex = -1;
+            nudCantidad.Value = 1;
+            dtpFechaVenta.Value = DateTime.Now;
+        }
+
     }
 
 }

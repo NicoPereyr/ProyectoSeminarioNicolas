@@ -206,14 +206,12 @@ namespace ProyectoSeminario.Windows.Formularios
             var banner = new Panel
             {
                 Name = "panelBanner",
-                Location = new Point(36, 650),
-                Size = new Size(835, 280),
-                BackColor = Color.FromArgb(40, 20, 20),
+                Location = new Point(36, 670),
+                Size = new Size(835, 220),
+                BackColor = Color.FromArgb(25, 15, 15),
                 BackgroundImage = Image.FromFile(
-                    Path.Combine(
-                        AppContext.BaseDirectory,
-                        "LogoHamburgueseria.png")),
-                BackgroundImageLayout = ImageLayout.Stretch,
+                    Path.Combine(AppContext.BaseDirectory, "LogoHamburgueseria.png")),
+                BackgroundImageLayout = ImageLayout.Zoom,
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
 
