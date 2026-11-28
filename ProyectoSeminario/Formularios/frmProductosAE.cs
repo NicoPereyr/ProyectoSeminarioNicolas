@@ -50,7 +50,7 @@ namespace ProyectoSeminario.Windows.Formularios
                     if (!File.Exists($"{carpetaImagen}{producto.Imagen}"))
                     {
                         //Si no existe, muestro la imagen de archivo no encontrado
-                        picImagen.Image = Image.FromFile(archivoNoEncontrado);
+                        //picImagen.Image = Image.FromFile(archivoNoEncontrado);
                     }
                     else
                     {
